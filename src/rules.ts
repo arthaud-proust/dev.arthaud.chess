@@ -87,11 +87,6 @@ export type GameSnapshot = {
   lastMove: Move;
 };
 
-export type ActionResult = {
-  gameSnapshot: GameSnapshot;
-  success: boolean;
-};
-
 export type CastlingPositions = {
   kingOrigin: Position;
   kingDestination: Position;
@@ -690,18 +685,20 @@ export function canPromoteTo(gameSnapshot: GameSnapshot, origin: Position, promo
     && isAPromotionPiece(promotion);
 }
 
-export function play(gameSnapshot: GameSnapshot, origin: Position, destination: Position): ActionResult {
-  return {
-    gameSnapshot: appliedMove(gameSnapshot, origin, destination),
-    success: canPlay(gameSnapshot, origin, destination)
-  };
+export function play(gameSnapshot: GameSnapshot, origin: Position, destination: Position): GameSnapshot {
+  if (!canPlay(gameSnapshot, origin, destination)) {
+    throw new Error("Can't play this move");
+  }
+
+  return appliedMove(gameSnapshot, origin, destination);
 }
 
-export function promoteTo(gameSnapshot: GameSnapshot, origin: Position, promotion: Piece): ActionResult {
-  return {
-    gameSnapshot: appliedPromotion(gameSnapshot, origin, promotion),
-    success: canPromote(gameSnapshot, origin)
-  };
+export function promoteTo(gameSnapshot: GameSnapshot, origin: Position, promotion: Piece): GameSnapshot {
+  if (!canPromote(gameSnapshot, origin)) {
+    throw new Error("Can't promote to this piece");
+  }
+
+  return appliedPromotion(gameSnapshot, origin, promotion);
 }
 
 function constructBoard(board: GameBoard): void {

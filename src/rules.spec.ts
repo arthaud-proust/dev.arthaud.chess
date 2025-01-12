@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  ActionResult,
   areSamePositions,
   canPlay,
   canPromote,
@@ -593,9 +592,9 @@ describe("pawn", () => {
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
     const destination: Position = positionOfPiece(gameSnapshot.board, BP);
 
-    const result: ActionResult = play(gameSnapshot, pieceToMove, destination);
-    expect(result.success).toBe(true);
-    expect(result.gameSnapshot.currentPlayer).toBe(WHITE);
+    const resultSnapshot = play(gameSnapshot, pieceToMove, destination);
+
+    expect(resultSnapshot.currentPlayer).toBe(WHITE);
   });
 });
 
@@ -1223,9 +1222,9 @@ describe("play", () => {
     const origin: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = positionOfPiece(gameSnapshot.board, BP);
 
-    const result: ActionResult = play(gameSnapshot, origin, destination);
-    expect(areSamePositions(result.gameSnapshot.lastMove.origin, origin)).toBe(true);
-    expect(areSamePositions(result.gameSnapshot.lastMove.destination, destination)).toBe(true);
+    const resultSnapshot = play(gameSnapshot, origin, destination);
+    expect(areSamePositions(resultSnapshot.lastMove.origin, origin)).toBe(true);
+    expect(areSamePositions(resultSnapshot.lastMove.destination, destination)).toBe(true);
   });
 
   it("mark_castling_at_lost_if_king_moved", () => {
@@ -1251,8 +1250,8 @@ describe("play", () => {
     const origin: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = positionOfPiece(gameSnapshot.board, BR);
 
-    const result: ActionResult = play(gameSnapshot, origin, destination);
-    expect(result.gameSnapshot.hasWhiteLostCastling).toBe(true);
+    const resultSnapshot = play(gameSnapshot, origin, destination);
+    expect(resultSnapshot.hasWhiteLostCastling).toBe(true);
   });
 
   it("mark_castling_at_lost_if_rook_moved", () => {
@@ -1278,8 +1277,8 @@ describe("play", () => {
     const origin: Position = positionOfPiece(gameSnapshot.board, WR);
     const destination: Position = positionOfPiece(gameSnapshot.board, BR);
 
-    const result: ActionResult = play(gameSnapshot, origin, destination);
-    expect(result.gameSnapshot.hasWhiteLostCastling).toBe(true);
+    const resultSnapshot = play(gameSnapshot, origin, destination);
+    expect(resultSnapshot.hasWhiteLostCastling).toBe(true);
   });
 
   it("do_not_change_lost_castling_if_king_and_rook_unmoved", () => {
@@ -1305,8 +1304,8 @@ describe("play", () => {
     const origin: Position = positionOfPiece(gameSnapshot.board, WP);
     const destination: Position = positionOfPiece(gameSnapshot.board, BP);
 
-    const result: ActionResult = play(gameSnapshot, origin, destination);
-    expect(result.gameSnapshot.hasWhiteLostCastling).toBe(false);
+    const resultSnapshot = play(gameSnapshot, origin, destination);
+    expect(resultSnapshot.hasWhiteLostCastling).toBe(false);
   });
 
   it("move_king_and_rook_when_castling_king_side", () => {
@@ -1332,10 +1331,10 @@ describe("play", () => {
     const origin: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 2, row: 0 };
 
-    const result: ActionResult = play(gameSnapshot, origin, destination);
-    expect(result.success).toBe(true);
-    expect(result.gameSnapshot.board[2][0]).toBe(WK);
-    expect(result.gameSnapshot.board[3][0]).toBe(WR);
+    const resultSnapshot = play(gameSnapshot, origin, destination);
+
+    expect(resultSnapshot.board[2][0]).toBe(WK);
+    expect(resultSnapshot.board[3][0]).toBe(WR);
   });
 
   it("move_king_and_rook_when_castling_queen_side", () => {
@@ -1361,10 +1360,10 @@ describe("play", () => {
     const origin: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 6, row: 0 };
 
-    const result: ActionResult = play(gameSnapshot, origin, destination);
-    expect(result.success).toBe(true);
-    expect(result.gameSnapshot.board[6][0]).toBe(WK);
-    expect(result.gameSnapshot.board[5][0]).toBe(WR);
+    const resultSnapshot = play(gameSnapshot, origin, destination);
+
+    expect(resultSnapshot.board[6][0]).toBe(WK);
+    expect(resultSnapshot.board[5][0]).toBe(WR);
   });
 
   it("eat_pawn_en_passant", () => {
@@ -1390,10 +1389,10 @@ describe("play", () => {
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
     const destination: Position = { col: 0, row: 5 };
 
-    const result: ActionResult = play(gameSnapshot, pieceToMove, destination);
-    expect(result.success).toBe(true);
-    expect(result.gameSnapshot.board[0][4]).toBe(__);
-    expect(result.gameSnapshot.board[0][5]).toBe(WP);
+    const resultSnapshot = play(gameSnapshot, pieceToMove, destination);
+
+    expect(resultSnapshot.board[0][4]).toBe(__);
+    expect(resultSnapshot.board[0][5]).toBe(WP);
   });
 });
 
@@ -1499,10 +1498,9 @@ describe("promote", () => {
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WP);
 
-    const result: ActionResult = promoteTo(gameSnapshot, origin, WQ);
+    const resultSnapshot = promoteTo(gameSnapshot, origin, WQ);
 
-    expect(result.success).toBe(true);
-    expect(pieceAt(result.gameSnapshot.board, origin)).toBe(WQ);
+    expect(pieceAt(resultSnapshot.board, origin)).toBe(WQ);
   });
 });
 
