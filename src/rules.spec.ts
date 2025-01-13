@@ -1502,6 +1502,33 @@ describe("promote", () => {
 
     expect(pieceAt(resultSnapshot.board, origin)).toBe(WQ);
   });
+
+  it("change turn", () => {
+    const gameSnapshot: GameSnapshot = {
+      board: [
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, WP],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __]
+      ],
+      currentPlayer: WHITE,
+      hasWhiteLostCastling: false,
+      hasBlackLostCastling: false,
+      lastMove: {
+        origin: { col: -1, row: -1 },
+        destination: { col: -1, row: -1 }
+      }
+    };
+    const origin: Position = positionOfPiece(gameSnapshot.board, WP);
+
+    const resultSnapshot = promoteTo(gameSnapshot, origin, WQ);
+
+    expect(resultSnapshot.currentPlayer).toBe(BLACK);
+  });
 });
 
 describe("isCurrentPlayerCheckmated", () => {

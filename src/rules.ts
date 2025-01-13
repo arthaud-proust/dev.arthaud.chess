@@ -356,6 +356,7 @@ function appliedPromotion(gameSnapshot: GameSnapshot, origin: Position, promotio
   const nextGameSnapshot: GameSnapshot = copyOfGameSnapshot(gameSnapshot);
 
   nextGameSnapshot.board[origin.col][origin.row] = promotion;
+  nextGameSnapshot.currentPlayer = gameSnapshot.currentPlayer == WHITE ? BLACK : WHITE;
 
   return nextGameSnapshot;
 }
