@@ -1,3 +1,5 @@
+import "./presenter.css";
+
 import {
   __,
   areSamePositions,
@@ -28,7 +30,7 @@ const isCaseBlack = ({ row, col }: Position) => {
   return (isEven(col) && isEven(row)) || (!isEven(col) && !isEven(row));
 };
 
-export const setupDOM = ({ container, onCaseClick, onPromoteTo }: {
+export const setupPresenter = ({ container, onCaseClick, onPromoteTo }: {
   container: HTMLElement,
   onCaseClick: (position: Position) => void,
   onPromoteTo: (piece: string) => void;

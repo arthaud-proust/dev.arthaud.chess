@@ -1,5 +1,4 @@
 import {
-  canPlay,
   canPromote,
   GameSnapshot,
   initialGameSnapshot,
@@ -21,10 +20,6 @@ export class Game {
 
   get currentPlayer() {
     return this.snapshot.currentPlayer;
-  }
-
-  canPlay({ origin, destination }: Move) {
-    return canPlay(this.snapshot, origin, destination);
   }
 
   play({ origin, destination }: Move) {
