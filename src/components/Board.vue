@@ -1,5 +1,6 @@
 <template>
-  <div class="overflow-hidden relative aspect-square" :class="horizontal || (snapshot.currentPlayer === WHITE ?'-rotate-90': 'rotate-90')">
+  <div class="overflow-hidden rounded-sm md:rounded-md lg:rounded-lg relative aspect-square"
+       :class="horizontal || (snapshot.currentPlayer === WHITE ?'-rotate-90': 'rotate-90')">
     <div
       class="aspect-square grid grid-cols-8 grid-rows-8"
     >
