@@ -26,7 +26,7 @@ const promotionPieces = [
   props.currentPlayer === WHITE ? WR : BR,
   props.currentPlayer === WHITE ? WN : BN,
   props.currentPlayer === WHITE ? WB : BB
-];
+] as const;
 
 const emit = defineEmits<{
   "promote": [Piece]
