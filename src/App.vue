@@ -5,14 +5,21 @@
         class="flex-1 aspect-square"
         :snapshot="game.snapshot"
         :activePosition="moveHandler.origin"
+        :horizontal="horizontal"
         @case:click="handleClick"
       />
 
-      <div v-if="game.snapshot.currentPlayer === WHITE" class="px-4 py-2 border">
-        White to play
-      </div>
-      <div v-else class="px-4 py-2 bg-neutral-900 text-white border border-neutral-900">
-        Black to play
+      <div class="flex gap-8 items-center">
+        <label class="flex gap-2">
+          <input type="checkbox" v-model="horizontal">
+          <span>Horizontal</span>
+        </label>
+        <div v-if="game.snapshot.currentPlayer === WHITE" class="px-4 py-2 border">
+          White to play
+        </div>
+        <div v-else class="px-4 py-2 bg-neutral-900 text-white border border-neutral-900">
+          Black to play
+        </div>
       </div>
     </div>
 
@@ -44,6 +51,7 @@ const game = reactive(new Game());
 const isPromotionModalOpened = ref(false);
 const isCheckmateModalOpened = ref(false);
 const isStalemateModalOpened = ref(false);
+const horizontal = ref(false);
 
 const handleClick = (position: Position) => {
   moveHandler.register(game.snapshot, position);

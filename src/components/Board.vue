@@ -1,16 +1,17 @@
 <template>
-  <div class="overflow-hidden relative aspect-square">
+  <div class="overflow-hidden relative aspect-square" :class="horizontal || (snapshot.currentPlayer === WHITE ?'-rotate-90': 'rotate-90')">
     <div
       class="aspect-square grid grid-cols-8 grid-rows-8"
     >
-      <template v-for="col in COLS">
-        <template v-for="row in ROWS">
+      <template v-for="col in Array(COLS).keys()">
+        <template v-for="row in Array(ROWS).keys()">
           <BoardCase
+            :class="`case-${col}-${row}`"
             :color="caseColor({col, row})"
-            :active="!!activePosition && areSamePositions(activePosition, {col: col-1, row: row-1})"
-            :playable="!!activePosition && canPlay(snapshot, activePosition, { col: col-1, row: row-1 })"
-            :occupied="pieceAt(snapshot.board, {col: col-1, row: row-1}) !== __"
-            @click="emit('case:click', {col: col-1, row: row-1})"
+            :active="!!activePosition && areSamePositions(activePosition, {col, row})"
+            :playable="!!activePosition && canPlay(snapshot, activePosition, { col, row })"
+            :occupied="pieceAt(snapshot.board, {col, row}) !== __"
+            @click="emit('case:click', {col, row})"
           />
         </template>
       </template>
@@ -21,8 +22,11 @@
     >
       <template v-for="col in COLS">
         <template v-for="row in ROWS">
-          <BoardPiece v-if="snapshot.board[col-1]?.[row-1]" :piece="snapshot.board[col-1][row-1]"
-                      :style="{gridColumnStart: row, gridRowStart: col}"
+          <BoardPiece
+            v-if="snapshot.board[col-1]?.[row-1]"
+            :piece="snapshot.board[col-1][row-1]"
+            :style="{gridColumnStart: row, gridRowStart: col}"
+            :class="horizontal || (snapshot.currentPlayer === WHITE ?'rotate-90': '-rotate-90')"
           />
         </template>
       </template>
@@ -35,10 +39,16 @@ import { __, areSamePositions, BLACK, canPlay, COLS, type GameSnapshot, pieceAt,
 import BoardCase from "@/components/BoardCase.vue";
 import BoardPiece from "@/components/BoardPiece.vue";
 
-defineProps<{
-  snapshot: GameSnapshot
-  activePosition?: Position
-}>();
+withDefaults(
+  defineProps<{
+    snapshot: GameSnapshot
+    activePosition?: Position
+    horizontal?: boolean
+  }>(),
+  {
+    horizontal: false
+  }
+);
 
 const emit = defineEmits<{
   "case:click": [Position]
