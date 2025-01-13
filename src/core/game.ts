@@ -1,14 +1,14 @@
 import {
   canPromote,
   copyOfGameSnapshot,
-  GameSnapshot,
+  type GameSnapshot,
   initialGameSnapshot,
   isCurrentPlayerCheckmated,
   isCurrentPlayerStalemated,
-  Move,
-  Piece,
+  type Move,
+  type Piece,
   play,
-  Position,
+  type Position,
   promoteTo
 } from "./rules.ts";
 
@@ -18,6 +18,7 @@ export class Game {
   constructor() {
     this._snapshot = initialGameSnapshot();
   }
+
 
   get currentPlayer() {
     return this._snapshot.currentPlayer;

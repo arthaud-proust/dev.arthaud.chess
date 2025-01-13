@@ -1,4 +1,4 @@
-import { GameSnapshot, Move, pieceAt, pieceColor, Position } from "./rules.ts";
+import { type GameSnapshot, type Move, pieceAt, pieceColor, type Position } from "./rules.ts";
 
 type OnPlayFn = (move: Move) => void;
 
