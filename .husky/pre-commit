@@ -1,0 +1,2 @@
+yarn test:smoke
+yarn test:unit
