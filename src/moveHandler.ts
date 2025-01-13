@@ -1,4 +1,4 @@
-import { GameBoard, Move, pieceAt, Position } from "./rules.ts";
+import { GameSnapshot, Move, pieceAt, pieceColor, Position } from "./rules.ts";
 
 type OnPlayFn = (move: Move) => void;
 
@@ -17,10 +17,14 @@ export class MoveHandler {
     this._destination = undefined;
   }
 
-  register(board: GameBoard, position: Position) {
-    if (!this._origin && pieceAt(board, position)) {
-      this._origin = position;
-      return;
+  register(snapshot: GameSnapshot, position: Position) {
+    if (!this._origin) {
+      const piece = pieceAt(snapshot.board, position);
+
+      if (piece && pieceColor(piece) === snapshot.currentPlayer) {
+        this._origin = position;
+        return;
+      }
     }
 
     if (this._origin) {

@@ -16,7 +16,7 @@ const {
 } = setupPresenter({
   container: app,
   onCaseClick: (position) => {
-    moveHandler.register(game.snapshot.board, position);
+    moveHandler.register(game.snapshot, position);
     renderSnapshot(game.snapshot, moveHandler.origin);
   },
   onPromoteTo: (piece: string) => {

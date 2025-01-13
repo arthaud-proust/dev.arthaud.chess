@@ -203,7 +203,7 @@ function colsBetween(a: Position, b: Position): number {
   return Math.abs(a.col - b.col);
 }
 
-function pieceColor(piece: Piece): Color {
+export function pieceColor(piece: Piece): Color {
   switch (piece) {
     case WK:
     case WQ:
