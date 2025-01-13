@@ -6,14 +6,14 @@ import {
   canPromoteTo,
   Colors,
   COLS,
-  GameSnapshot,
+  type GameSnapshot,
   isCurrentPlayerCheckmated,
   isCurrentPlayerStalemated,
   isPlayerInCheck,
   pieceAt,
   Pieces,
   play,
-  Position,
+  type Position,
   positionOfPiece,
   promoteTo,
   ROWS
@@ -807,6 +807,84 @@ describe("king", () => {
     expect(canPlay(gameSnapshot, pieceToMove, destination)).toBe(false);
   });
 
+  it("cannot_castle_kingside_when_king_is_in_check", () => {
+    const gameSnapshot: GameSnapshot = {
+      board: [
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [WK, __, BR, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [WR, __, __, __, __, __, __, __]
+      ],
+      currentPlayer: WHITE,
+      hasWhiteLostCastling: false,
+      hasBlackLostCastling: false,
+      lastMove: {
+        origin: { col: -1, row: -1 },
+        destination: { col: -1, row: -1 }
+      }
+    };
+    const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
+    const destination: Position = { col: 6, row: 0 };
+
+    expect(canPlay(gameSnapshot, pieceToMove, destination)).toBe(false);
+  });
+
+  it("cannot_castle_kingside_if_king_will_be_in_check", () => {
+    const gameSnapshot: GameSnapshot = {
+      board: [
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [WK, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, BR, __, __, __, __, __],
+        [WR, __, __, __, __, __, __, __]
+      ],
+      currentPlayer: WHITE,
+      hasWhiteLostCastling: false,
+      hasBlackLostCastling: false,
+      lastMove: {
+        origin: { col: -1, row: -1 },
+        destination: { col: -1, row: -1 }
+      }
+    };
+    const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
+    const destination: Position = { col: 6, row: 0 };
+
+    expect(canPlay(gameSnapshot, pieceToMove, destination)).toBe(false);
+  });
+
+  it("cannot_castle_kingside_if_king_will_go_trough_threatened_case", () => {
+    const gameSnapshot: GameSnapshot = {
+      board: [
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [WK, __, __, __, __, __, __, __],
+        [__, __, BR, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [WR, __, __, __, __, __, __, __]
+      ],
+      currentPlayer: WHITE,
+      hasWhiteLostCastling: false,
+      hasBlackLostCastling: false,
+      lastMove: {
+        origin: { col: -1, row: -1 },
+        destination: { col: -1, row: -1 }
+      }
+    };
+    const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
+    const destination: Position = { col: 6, row: 0 };
+
+    expect(canPlay(gameSnapshot, pieceToMove, destination)).toBe(false);
+  });
+
   it("can_castle_queenside", () => {
     const gameSnapshot: GameSnapshot = {
       board: [
@@ -924,6 +1002,87 @@ describe("king", () => {
 
     expect(canPlay(gameSnapshot, pieceToMove, destination)).toBe(false);
   });
+
+  it("cannot_castle_queenside_when_king_is_in_check", () => {
+    const gameSnapshot: GameSnapshot = {
+      board: [
+        [WR, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [WK, __, BR, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __]
+      ],
+      currentPlayer: WHITE,
+      hasWhiteLostCastling: false,
+      hasBlackLostCastling: false,
+      lastMove: {
+        origin: { col: -1, row: -1 },
+        destination: { col: -1, row: -1 }
+      }
+    };
+    const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
+    const destination: Position = { col: 2, row: 0 };
+
+    expect(canPlay(gameSnapshot, pieceToMove, destination)).toBe(false);
+  });
+
+  it("cannot_castle_queenside_if_king_will_be_in_check", () => {
+    const gameSnapshot: GameSnapshot = {
+      board: [
+        [WR, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, BR, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [WK, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __]
+      ],
+      currentPlayer: WHITE,
+      hasWhiteLostCastling: false,
+      hasBlackLostCastling: false,
+      lastMove: {
+        origin: { col: -1, row: -1 },
+        destination: { col: -1, row: -1 }
+      }
+    };
+    const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
+    const destination: Position = { col: 2, row: 0 };
+
+    expect(canPlay(gameSnapshot, pieceToMove, destination)).toBe(false);
+  });
+
+  it("cannot_castle_queenside_if_king_will_go_trough_threatened_case", () => {
+    const gameSnapshot: GameSnapshot = {
+      board: [
+        [WR, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, BR, __, __, __, __, __],
+        [WK, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __],
+        [__, __, __, __, __, __, __, __]
+      ],
+      currentPlayer: WHITE,
+      hasWhiteLostCastling: false,
+      hasBlackLostCastling: false,
+      lastMove: {
+        origin: { col: -1, row: -1 },
+        destination: { col: -1, row: -1 }
+      }
+    };
+    const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
+    const destination: Position = { col: 2, row: 0 };
+
+    expect(canPlay(gameSnapshot, pieceToMove, destination)).toBe(false);
+  });
+
+  // TODO check cannot rock if rook can be eat
+// TODO check cannot rock king in check
 });
 
 describe("rook", () => {

@@ -535,12 +535,24 @@ function isMoveValid(gameSnapshot: GameSnapshot, origin: Position, destination: 
     const queenSide: CastlingPositions = gameSnapshot.currentPlayer == WHITE ? WHITE_CASTLING_QUEEN_SIDE : BLACK_CASTLING_QUEEN_SIDE;
     const hasLostCastling: boolean = gameSnapshot.currentPlayer == WHITE ? gameSnapshot.hasWhiteLostCastling : gameSnapshot.hasBlackLostCastling;
 
-    if (areSamePositions(origin, kingSide.kingOrigin) && areSamePositions(destination, kingSide.kingDestination)) {
-      return !hasLostCastling && isRowEmptyBetween(gameSnapshot.board, kingSide.kingOrigin, kingSide.rookOrigin);
+    const isCastlingKingSide = areSamePositions(origin, kingSide.kingOrigin) && areSamePositions(destination, kingSide.kingDestination);
+    if (isCastlingKingSide) {
+      const nextSnapshot = appliedMove(gameSnapshot, origin, destination);
+
+      return !hasLostCastling
+        && isRowEmptyBetween(gameSnapshot.board, kingSide.kingOrigin, kingSide.rookOrigin)
+        && !isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer)
+        && !isPieceThreatened(nextSnapshot, kingSide.rookDestination);
     }
 
-    if (areSamePositions(origin, queenSide.kingOrigin) && areSamePositions(destination, queenSide.kingDestination)) {
-      return !hasLostCastling && isRowEmptyBetween(gameSnapshot.board, queenSide.kingOrigin, queenSide.rookOrigin);
+    const isCastlingQueenSide = areSamePositions(origin, queenSide.kingOrigin) && areSamePositions(destination, queenSide.kingDestination);
+    if (isCastlingQueenSide) {
+      const nextSnapshot = appliedMove(gameSnapshot, origin, destination);
+
+      return !hasLostCastling
+        && isRowEmptyBetween(gameSnapshot.board, queenSide.kingOrigin, queenSide.rookOrigin)
+        && !isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer)
+        && !isPieceThreatened(nextSnapshot, queenSide.rookDestination);
     }
 
     return rowsBetween(origin, destination) <= 1 && colsBetween(origin, destination) <= 1;
@@ -569,17 +581,17 @@ function isPieceThreatened(gameSnapshot: GameSnapshot, piece: Position): boolean
     return false;
   }
 
-  const piecePosition: Position = { col: -1, row: -1 };
+  const attacker: Position = { col: -1, row: -1 };
   for (let col = 0; col < COLS; col++) {
     for (let row = 0; row < ROWS; row++) {
-      piecePosition.col = col;
-      piecePosition.row = row;
+      attacker.col = col;
+      attacker.row = row;
 
-      if (areSamePositions(piece, piecePosition)) {
+      if (areSamePositions(piece, attacker)) {
         continue;
       }
 
-      if (isMoveValid(gameSnapshot, piecePosition, piece)) {
+      if (isMoveValid(gameSnapshot, attacker, piece)) {
         return true;
       }
     }
