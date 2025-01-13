@@ -9,7 +9,7 @@
           <BoardCase
             :class="`case-${col}-${row}`"
             :color="caseColor({col, row})"
-            :active="!!activePosition && areSamePositions(activePosition, {col, row})"
+            :active="(!!activePosition && areSamePositions(activePosition, {col, row})) || areSamePositions(snapshot.lastMove.origin, {col, row}) || areSamePositions(snapshot.lastMove.destination, {col, row})"
             :playable="!!activePosition && canPlay(snapshot, activePosition, { col, row })"
             :occupied="pieceAt(snapshot.board, {col, row}) !== __"
             @click="emit('case:click', {col, row})"

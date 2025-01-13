@@ -15,7 +15,6 @@ export class Game {
   private _snapshot: GameSnapshot;
 
   constructor(snapshot: GameSnapshot) {
-    console.log(snapshot);
     this._snapshot = snapshot;
   }
 
