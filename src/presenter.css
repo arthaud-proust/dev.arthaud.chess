@@ -101,11 +101,11 @@ h1 {
 }
 
 .board__case--white {
-    background: #FFFFFF;
+    background: #EBECD0;
 }
 
 .board__case--black {
-    background: #A6A6A6;
+    background: #739552;
 }
 
 .board__case--active {
