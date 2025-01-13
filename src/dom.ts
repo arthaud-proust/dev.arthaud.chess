@@ -104,18 +104,18 @@ export const setupDOM = ({ container, onCaseClick, onPromoteTo }: {
 
   const contentForPiece = {
     [__]: "",
-    [WK]: "WK",
-    [WQ]: "WQ",
-    [WB]: "WB",
-    [WR]: "WR",
-    [WN]: "WN",
-    [WP]: "WP",
-    [BK]: "BK",
-    [BQ]: "BQ",
-    [BB]: "BB",
-    [BR]: "BR",
-    [BN]: "BN",
-    [BP]: "BP"
+    [WK]: "<img src=\"/pieces/WK.png\" alt=\"White King\"/>",
+    [WQ]: "<img src=\"/pieces/WQ.png\" alt=\"White Queen\"/>",
+    [WB]: "<img src=\"/pieces/WB.png\" alt=\"White Bishop\"/>",
+    [WR]: "<img src=\"/pieces/WR.png\" alt=\"White Rook\"/>",
+    [WN]: "<img src=\"/pieces/WN.png\" alt=\"White Knight\"/>",
+    [WP]: "<img src=\"/pieces/WP.png\" alt=\"White Pawn\"/>",
+    [BK]: "<img src=\"/pieces/BK.png\" alt=\"Black King\"/>",
+    [BQ]: "<img src=\"/pieces/BQ.png\" alt=\"Black Queen\"/>",
+    [BB]: "<img src=\"/pieces/BB.png\" alt=\"Black Bishop\"/>",
+    [BR]: "<img src=\"/pieces/BR.png\" alt=\"Black Rook\"/>",
+    [BN]: "<img src=\"/pieces/BN.png\" alt=\"Black Knight\"/>",
+    [BP]: "<img src=\"/pieces/BP.png\" alt=\"Black Pawn\"/>"
   };
 
   const renderBoard = (board: GameBoard, activePosition?: Position) => {

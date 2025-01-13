@@ -91,24 +91,24 @@ h1 {
     align-items: center;
     justify-content: center;
     aspect-ratio: 1/1;
-    font-size: 200%;
-    font-weight: bold;
-    padding: 0.5rem;
     user-select: none;
+}
+
+.board__case img {
+    width: 80%;
+    height: 80%;
 }
 
 .board__case--white {
     background: #FFFFFF;
-    color: #000000;
 }
 
 .board__case--black {
-    background: #000000;
-    color: #FFFFFF;
+    background: #A6A6A6;
 }
 
 .board__case--active {
-    background: #8F8F8F;
+    background: #E5B349;
 }
 
 .endGameModal, .promotionModal {
