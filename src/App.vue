@@ -11,16 +11,8 @@
           @case:click="handleClick"
         />
 
-        <div class="flex gap-8 items-center">
-          <label class="flex gap-2">
-            <input type="checkbox" v-model="horizontal">
-            <span>Horizontal</span>
-          </label>
-          <label v-if="!horizontal" class="flex gap-2">
-            <input type="checkbox" v-model="rotate">
-            <span>Rotate</span>
-          </label>
-          <div class=" flex items-center gap-1">
+        <div class="flex gap-8 items-center select-none">
+          <div class="flex items-center gap-1">
             <template v-if="game.snapshot.currentPlayer === WHITE">
               <BoardPiece :piece="WK" class="w-8" />
               <span>White to play</span>
@@ -31,9 +23,19 @@
             </template>
           </div>
 
-          <button @click="savedSnapshot.reset()" class="bg-neutral-100 rounded-md px-4 py-2">
-            Reset
-          </button>
+          <div class="flex gap-2 items-center">
+            <label v-tooltip="'Display board horizontally'" class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2">
+              <input type="checkbox" v-model="horizontal">
+              <span>Horizontal</span>
+            </label>
+            <label v-if="!horizontal" v-tooltip="'Rotate board for the current player'" class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2">
+              <input type="checkbox" v-model="rotate">
+              <span>Rotate</span>
+            </label>
+            <button @click="savedSnapshot.reset()" v-tooltip="'Reset board for a new game'" class="bg-red-100 text-red-800 rounded-md px-4 py-2">
+              New game
+            </button>
+          </div>
         </div>
       </div>
 
