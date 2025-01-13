@@ -2,7 +2,6 @@ import {
   canPromote,
   copyOfGameSnapshot,
   type GameSnapshot,
-  initialGameSnapshot,
   isCurrentPlayerCheckmated,
   isCurrentPlayerStalemated,
   type Move,
@@ -15,10 +14,10 @@ import {
 export class Game {
   private _snapshot: GameSnapshot;
 
-  constructor() {
-    this._snapshot = initialGameSnapshot();
+  constructor(snapshot: GameSnapshot) {
+    console.log(snapshot);
+    this._snapshot = snapshot;
   }
-
 
   get currentPlayer() {
     return this._snapshot.currentPlayer;

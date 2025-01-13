@@ -468,6 +468,11 @@
   dependencies:
     undici-types "~6.20.0"
 
+"@types/web-bluetooth@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@types/web-bluetooth/-/web-bluetooth-0.0.20.tgz#f066abfcd1cbe66267cdbbf0de010d8a41b41597"
+  integrity sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==
+
 "@vitejs/plugin-vue@^5.2.1":
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.2.1.tgz#d1491f678ee3af899f7ae57d9c21dc52a65c7133"
@@ -659,6 +664,28 @@
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@vue/tsconfig/-/tsconfig-0.7.0.tgz#67044c847b7a137b8cbfd6b23104c36dbaf80d1d"
   integrity sha512-ku2uNz5MaZ9IerPPUyOHzyjhXoX2kVJaVf7hL315DC17vS6IiZRmmCPfggNbU16QTvM80+uYYy3eYJB59WCtvg==
+
+"@vueuse/core@^12.4.0":
+  version "12.4.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-12.4.0.tgz#7a17f12fe941a16fb2ca9dbd60106975290bb34d"
+  integrity sha512-XnjQYcJwCsyXyIafyA6SvyN/OBtfPnjvJmbxNxQjCcyWD198urwm5TYvIUUyAxEAN0K7HJggOgT15cOlWFyLeA==
+  dependencies:
+    "@types/web-bluetooth" "^0.0.20"
+    "@vueuse/metadata" "12.4.0"
+    "@vueuse/shared" "12.4.0"
+    vue "^3.5.13"
+
+"@vueuse/metadata@12.4.0":
+  version "12.4.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-12.4.0.tgz#8a21ceec6fb3866b4ed445f0a3dc45dd5a4f2b64"
+  integrity sha512-AhPuHs/qtYrKHUlEoNO6zCXufu8OgbR8S/n2oMw1OQuBQJ3+HOLQ+EpvXs+feOlZMa0p8QVvDWNlmcJJY8rW2g==
+
+"@vueuse/shared@12.4.0":
+  version "12.4.0"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-12.4.0.tgz#2d4b2d51068db0cc623f6e0342c54a652a9b466d"
+  integrity sha512-9yLgbHVIF12OSCojnjTIoZL1+UA10+O4E1aD6Hpfo/DKVm5o3SZIwz6CupqGy3+IcKI8d6Jnl26EQj/YucnW0Q==
+  dependencies:
+    vue "^3.5.13"
 
 alien-signals@^0.4.9:
   version "0.4.14"
