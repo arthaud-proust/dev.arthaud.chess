@@ -20,7 +20,7 @@
               <BoardPiece :piece="WK" class="w-8" />
               <span>White to play</span>
             </template>
-            <template>
+            <template v-else>
               <BoardPiece :piece="BK" class="w-8" />
               <span>Black to play</span>
             </template>
