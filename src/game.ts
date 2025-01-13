@@ -1,5 +1,6 @@
 import {
   canPromote,
+  copyOfGameSnapshot,
   GameSnapshot,
   initialGameSnapshot,
   isCurrentPlayerCheckmated,
@@ -12,37 +13,37 @@ import {
 } from "./rules.ts";
 
 export class Game {
-  private snapshot: GameSnapshot;
+  private _snapshot: GameSnapshot;
 
   constructor() {
-    this.snapshot = initialGameSnapshot();
+    this._snapshot = initialGameSnapshot();
   }
 
   get currentPlayer() {
-    return this.snapshot.currentPlayer;
+    return this._snapshot.currentPlayer;
   }
 
   play({ origin, destination }: Move) {
-    this.snapshot = play(this.snapshot, origin, destination);
+    this._snapshot = play(this._snapshot, origin, destination);
   }
 
   canPromote(position: Position) {
-    return canPromote(this.snapshot, position);
+    return canPromote(this._snapshot, position);
   }
 
   promoteTo(position: Position, piece: Piece) {
-    this.snapshot = promoteTo(this.snapshot, position, piece);
+    this._snapshot = promoteTo(this._snapshot, position, piece);
   }
 
   get isCurrentPlayerCheckmated() {
-    return isCurrentPlayerCheckmated(this.snapshot);
+    return isCurrentPlayerCheckmated(this._snapshot);
   }
 
   get isCurrentPlayerStalemated() {
-    return isCurrentPlayerStalemated(this.snapshot);
+    return isCurrentPlayerStalemated(this._snapshot);
   }
 
-  get board() {
-    return this.snapshot.board;
+  get snapshot() {
+    return copyOfGameSnapshot(this._snapshot);
   }
 }

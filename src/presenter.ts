@@ -10,9 +10,10 @@ import {
   BP,
   BQ,
   BR,
+  canPlay,
   Color,
   COLS,
-  GameBoard,
+  GameSnapshot,
   pieceAt,
   Position,
   ROWS,
@@ -120,19 +121,22 @@ export const setupPresenter = ({ container, onCaseClick, onPromoteTo }: {
     [BP]: "<img src=\"/pieces/BP.png\" alt=\"Black Pawn\"/>"
   };
 
-  const renderBoard = (board: GameBoard, activePosition?: Position) => {
+  const renderBoard = (snapshot: GameSnapshot, activePosition?: Position) => {
     boardCaseEls.forEach((colEls, col) => {
       colEls.forEach((caseEl, row) => {
-        caseEl.innerHTML = contentForPiece[pieceAt(board, { col, row })];
+        const piece = pieceAt(snapshot.board, { col, row });
+        caseEl.innerHTML = contentForPiece[piece];
+        caseEl.classList.toggle("board__case--occupied", piece !== __);
         caseEl.classList.toggle("board__case--active", !!activePosition && areSamePositions({ col, row }, activePosition));
+        caseEl.classList.toggle("board__case--playable", !!activePosition && canPlay(snapshot, activePosition, { col, row }));
       });
     });
   };
 
-  const render = (currentPlayer: Color, board: GameBoard, activePosition?: Position) => {
-    updateCurrentPlayer(currentPlayer);
+  const renderSnapshot = (snapshot: GameSnapshot, activePosition?: Position) => {
+    updateCurrentPlayer(snapshot.currentPlayer);
 
-    renderBoard(board, activePosition);
+    renderBoard(snapshot, activePosition);
   };
 
   const renderStalemate = () => {
@@ -155,5 +159,5 @@ export const setupPresenter = ({ container, onCaseClick, onPromoteTo }: {
     promotionModalEl.showModal();
   };
 
-  return { render, renderStalemate, renderCheckmate, openPromotionModal };
+  return { renderSnapshot, renderStalemate, renderCheckmate, openPromotionModal };
 };

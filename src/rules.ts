@@ -237,7 +237,7 @@ export function pieceAt(board: GameBoard, position: Position): Piece {
   return pieceAtColRow(board, position.col, position.row);
 }
 
-function copyOfGameSnapshot(gameSnapshot: GameSnapshot): GameSnapshot {
+export function copyOfGameSnapshot(gameSnapshot: GameSnapshot): GameSnapshot {
   const newGameSnapshot: GameSnapshot = createGameSnapshot();
 
   for (let col = 0; col < COLS; col++) {

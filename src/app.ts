@@ -9,15 +9,15 @@ if (!app) throw new Error("Could not find #app element");
 const game = new Game();
 
 const {
-  render,
+  renderSnapshot,
   renderStalemate,
   renderCheckmate,
   openPromotionModal
 } = setupPresenter({
   container: app,
   onCaseClick: (position) => {
-    moveHandler.register(game.board, position);
-    render(game.currentPlayer, game.board, moveHandler.origin);
+    moveHandler.register(game.snapshot.board, position);
+    renderSnapshot(game.snapshot, moveHandler.origin);
   },
   onPromoteTo: (piece: string) => {
     if (!moveHandler.destination) return;
@@ -31,7 +31,7 @@ const {
       moveHandler.reset();
     }
 
-    render(game.currentPlayer, game.board, moveHandler.origin);
+    renderSnapshot(game.snapshot, moveHandler.origin);
   }
 });
 
@@ -59,8 +59,8 @@ const moveHandler = new MoveHandler((move) => {
     moveHandler.reset();
   }
 
-  render(game.currentPlayer, game.board, moveHandler.origin);
+  renderSnapshot(game.snapshot, moveHandler.origin);
 });
 
 
-render(game.currentPlayer, game.board, moveHandler.origin);
+renderSnapshot(game.snapshot, moveHandler.origin);
