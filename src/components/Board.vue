@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-hidden rounded-sm md:rounded-md lg:rounded-lg relative aspect-square"
-       :class="horizontal || (snapshot.currentPlayer === WHITE ?'-rotate-90': 'rotate-90')">
+       :class="horizontal || (snapshot.currentPlayer === WHITE || !rotate ?'-rotate-90': 'rotate-90')">
     <div
       class="aspect-square grid grid-cols-8 grid-rows-8"
     >
@@ -27,7 +27,7 @@
             v-if="snapshot.board[col-1]?.[row-1]"
             :piece="snapshot.board[col-1][row-1]"
             :style="{gridColumnStart: row, gridRowStart: col}"
-            :class="horizontal || (snapshot.currentPlayer === WHITE ?'rotate-90': '-rotate-90')"
+            :class="horizontal || (snapshot.currentPlayer === WHITE || !rotate ?'rotate-90': '-rotate-90')"
           />
         </template>
       </template>
@@ -45,9 +45,11 @@ withDefaults(
     snapshot: GameSnapshot
     activePosition?: Position
     horizontal?: boolean
+    rotate?: boolean
   }>(),
   {
-    horizontal: false
+    horizontal: false,
+    rotate: false
   }
 );
 

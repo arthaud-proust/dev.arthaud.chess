@@ -7,6 +7,7 @@
           :snapshot="game.snapshot"
           :activePosition="moveHandler.origin"
           :horizontal="horizontal"
+          :rotate="rotate"
           @case:click="handleClick"
         />
 
@@ -15,7 +16,11 @@
             <input type="checkbox" v-model="horizontal">
             <span>Horizontal</span>
           </label>
-          <div class=" flex items-center gap-2">
+          <label v-if="!horizontal" class="flex gap-2">
+            <input type="checkbox" v-model="rotate">
+            <span>Rotate</span>
+          </label>
+          <div class=" flex items-center gap-1">
             <template v-if="game.snapshot.currentPlayer === WHITE">
               <BoardPiece :piece="WK" class="w-8" />
               <span>White to play</span>
@@ -63,6 +68,7 @@ import { useSavedSnapshot } from "@/composables/useSavedSnapshot.ts";
 
 const savedSnapshot = useSavedSnapshot();
 const horizontal = useStorage(localStorageKey("ui.horizontal"), false);
+const rotate = useStorage(localStorageKey("ui.rotate"), false);
 const game = reactive(new Game(copyOfGameSnapshot(savedSnapshot.snapshot.value)));
 const isPromotionModalOpened = ref(false);
 const isCheckmateModalOpened = ref(false);
