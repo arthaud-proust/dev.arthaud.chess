@@ -1,8 +1,8 @@
 <template>
   <div class="w-full h-dvh flex items-center justify-center">
-    <div class="w-full max-w-3xl p-2 md:p-4 lg:p-8 h-full flex flex-col items-center gap-4 justify-center">
+    <div class="w-full max-w-3xl p-2 md:p-4 lg:p-8 h-full flex flex-col items-center gap-4 justify-end">
       <Board
-        class="aspect-square w-full"
+        class="flex-shrink-0 aspect-square w-full"
         :snapshot="game.snapshot"
         :activePosition="moveHandler.origin"
         :horizontal="horizontal"
