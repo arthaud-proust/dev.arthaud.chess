@@ -21,6 +21,7 @@
       class="pointer-events-none absolute top-0 left-0 h-full w-full aspect-square grid grid-cols-8 grid-rows-8"
       ref="container"
       @mouseup="placePiece"
+      @touchend="placePiece"
     >
       <template v-for="{col, row} in orientedPositions">
         <div
@@ -30,10 +31,11 @@
           <BoardPiece
             class="pointer-events-auto"
             @mousedown="movePiece({col, row})"
+            @touchstart="movePiece({col, row})"
             v-if="snapshot.board[col]?.[row]"
             :piece="snapshot.board[col][row]"
             :style="movedPiecePosition && areSamePositions(movedPiecePosition, {col, row})
-               && {top: `${y}px`,left:`${x}px`, width:`12.5%`, transform: 'translate(-100%, -70%)'}
+               && {top: `${elementY}px`,left:`${elementX}px`, width:`12.5%`, transform: 'translate(-50%, -50%)'}
             "
             :class="[
               movedPiecePosition && areSamePositions(movedPiecePosition, {col, row}) && 'absolute'
@@ -102,7 +104,7 @@ const orientedPositions = computed(() => {
 });
 
 const container = ref<HTMLDivElement>();
-const { x, y } = useMouseInElement(container);
+const { x, y, elementX, elementY } = useMouseInElement(container);
 
 const movedPiecePosition = ref<Position | null>(null);
 const movePiece = (position: Position) => {
@@ -120,7 +122,7 @@ const hoveredPosition = computed(() => {
   const boardCase = elements.find(el => {
     return el instanceof HTMLDivElement && el.dataset.type === "board-case";
   }) as HTMLDivElement | undefined;
-
+  
   if (!boardCase || !boardCase.dataset.col || !boardCase.dataset.row) return;
 
   return {
