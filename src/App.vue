@@ -42,7 +42,7 @@
           </template>
         </div>
 
-        <div class="flex gap-2 items-center">
+        <div class="flex flex-wrap gap-2 items-center">
           <label v-tooltip="'Display board horizontally'" class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2">
             <input type="checkbox" v-model="horizontal">
             <span>Horizontal</span>
@@ -57,7 +57,7 @@
           </button>
 
           <button @click="savedSnapshot.reset()" v-tooltip="'Reset board for a new game'" class="bg-red-100 text-red-800 rounded-md px-4 py-2">
-            New game
+            New game
           </button>
         </div>
       </div>
