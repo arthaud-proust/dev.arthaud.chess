@@ -10,6 +10,7 @@ import {
   type Position,
   promoteTo
 } from "./rules.ts";
+import { countPoints, eatenBlackPieces, eatenWhitePieces } from "@/core/piecesCounter.ts";
 
 export class Game {
   private history: Array<GameSnapshot>;
@@ -52,6 +53,24 @@ export class Game {
 
   get canUndo() {
     return this.history.length > 0;
+  }
+
+  get eatenWhitePieces() {
+    return eatenWhitePieces(this._snapshot.board);
+  }
+
+  get eatenBlackPieces() {
+    return eatenBlackPieces(this._snapshot.board);
+  }
+
+  get whitePoints() {
+    const points = countPoints(this.eatenWhitePieces) - countPoints(this.eatenBlackPieces);
+    if (points > 0) return points;
+  }
+
+  get blackPoints() {
+    const points = countPoints(this.eatenBlackPieces) - countPoints(this.eatenWhitePieces);
+    if (points > 0) return points;
   }
 
   undo() {

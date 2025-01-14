@@ -11,6 +11,26 @@
           @case:click="handleClick"
         />
 
+        <div class="w-full flex gap-8 justify-between h-6">
+          <div class="flex items-center">
+            <span v-if="game.blackPoints" class="mr-2 font-bold text-sm">+{{ game.blackPoints }}</span>
+            <BoardPiece
+              v-for="piece in game.eatenBlackPieces" :piece="piece"
+              class="h-full -mr-2"
+            />
+          </div>
+
+          <div class="flex items-center">
+            <div class="flex items-center -gap-4 h-full">
+              <BoardPiece
+                v-for="piece in game.eatenWhitePieces" :piece="piece"
+                class="h-full -ml-2"
+              />
+            </div>
+            <span v-if="game.whitePoints" class="ml-2 font-bold text-sm">+{{ game.whitePoints }}</span>
+          </div>
+        </div>
+
         <div class="flex gap-8 items-center select-none">
           <div class="flex items-center gap-1">
             <template v-if="game.snapshot.currentPlayer === WHITE">
