@@ -1,82 +1,80 @@
 <template>
   <div class="w-full h-dvh flex items-center justify-center">
-    <div :style="{height: '100vmin', width: '100vmin'}" class="mx-auto flex flex-col items-center justify-center p-2 md:p-4 lg:p-8">
-      <div class="w-fit h-full flex flex-col items-center gap-4 justify-center">
-        <Board
-          class="flex-1 aspect-square"
-          :snapshot="game.snapshot"
-          :activePosition="moveHandler.origin"
-          :horizontal="horizontal"
-          :rotate="rotate"
-          @case:click="handleClick"
-        />
+    <div class="w-full max-w-3xl p-2 md:p-4 lg:p-8 h-full flex flex-col items-center gap-4 justify-center">
+      <Board
+        class="aspect-square w-full"
+        :snapshot="game.snapshot"
+        :activePosition="moveHandler.origin"
+        :horizontal="horizontal"
+        :rotate="rotate"
+        @case:click="handleClick"
+      />
 
-        <div class="w-full flex gap-8 justify-between h-6">
-          <div class="flex items-center">
-            <span v-if="game.blackPoints" class="mr-2 font-bold text-sm">+{{ game.blackPoints }}</span>
-            <BoardPiece
-              v-for="piece in game.eatenBlackPieces" :piece="piece"
-              class="h-full -mr-2"
-            />
-          </div>
-
-          <div class="flex items-center">
-            <div class="flex items-center -gap-4 h-full">
-              <BoardPiece
-                v-for="piece in game.eatenWhitePieces" :piece="piece"
-                class="h-full -ml-2"
-              />
-            </div>
-            <span v-if="game.whitePoints" class="ml-2 font-bold text-sm">+{{ game.whitePoints }}</span>
-          </div>
+      <div class="w-full flex gap-8 justify-between h-6">
+        <div class="flex items-center">
+          <span v-if="game.blackPoints" class="mr-2 text-sm text-neutral-500 font-medium">+{{ game.blackPoints }}</span>
+          <BoardPiece
+            v-for="piece in game.eatenBlackPieces" :piece="piece"
+            class="h-full -mr-2"
+          />
         </div>
 
-        <div class="flex gap-8 items-center select-none">
-          <div class="flex items-center gap-1">
-            <template v-if="game.snapshot.currentPlayer === WHITE">
-              <BoardPiece :piece="WK" class="w-8" />
-              <span>White to play</span>
-            </template>
-            <template v-else>
-              <BoardPiece :piece="BK" class="w-8" />
-              <span>Black to play</span>
-            </template>
+        <div class="flex items-center">
+          <div class="flex items-center -gap-4 h-full">
+            <BoardPiece
+              v-for="piece in game.eatenWhitePieces" :piece="piece"
+              class="h-full -ml-2"
+            />
           </div>
-
-          <div class="flex gap-2 items-center">
-            <label v-tooltip="'Display board horizontally'" class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2">
-              <input type="checkbox" v-model="horizontal">
-              <span>Horizontal</span>
-            </label>
-            <label v-if="!horizontal" v-tooltip="'Rotate board for the current player'" class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2">
-              <input type="checkbox" v-model="rotate">
-              <span>Rotate</span>
-            </label>
-
-            <button @click="game.undo()" v-if="game.canUndo" v-tooltip="'Undo last move'" class="bg-neutral-100 rounded-md px-4 py-2">
-              Undo
-            </button>
-
-            <button @click="savedSnapshot.reset()" v-tooltip="'Reset board for a new game'" class="bg-red-100 text-red-800 rounded-md px-4 py-2">
-              New game
-            </button>
-          </div>
+          <span v-if="game.whitePoints" class="ml-2 text-sm text-neutral-500 font-medium">+{{ game.whitePoints }}</span>
         </div>
       </div>
 
-      <BoardPromotionModal
-        :is-open="isPromotionModalOpened"
-        :current-player="game.currentPlayer"
-        @promote="handlePromotion"
-      />
-      <BoardCheckmateModal
-        :is-open="isCheckmateModalOpened"
-        :current-player="game.currentPlayer"
-      />
-      <BoardStalemateModal
-        :is-open="isStalemateModalOpened"
-      />
+      <div class="flex max-md:text-sm flex-wrap gap-x-8 gap-y-4 items-center select-none">
+        <div class="flex items-center gap-1">
+          <template v-if="game.snapshot.currentPlayer === WHITE">
+            <BoardPiece :piece="WK" class="w-8" />
+            <span>White to play</span>
+          </template>
+          <template v-else>
+            <BoardPiece :piece="BK" class="w-8" />
+            <span>Black to play</span>
+          </template>
+        </div>
+
+        <div class="flex gap-2 items-center">
+          <label v-tooltip="'Display board horizontally'" class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2">
+            <input type="checkbox" v-model="horizontal">
+            <span>Horizontal</span>
+          </label>
+          <label v-if="!horizontal" v-tooltip="'Rotate board for the current player'" class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2">
+            <input type="checkbox" v-model="rotate">
+            <span>Rotate</span>
+          </label>
+
+          <button @click="game.undo()" v-if="game.canUndo" v-tooltip="'Undo last move'" class="bg-neutral-100 rounded-md px-4 py-2">
+            Undo
+          </button>
+
+          <button @click="savedSnapshot.reset()" v-tooltip="'Reset board for a new game'" class="bg-red-100 text-red-800 rounded-md px-4 py-2">
+            New game
+          </button>
+        </div>
+      </div>
     </div>
+
+    <BoardPromotionModal
+      :is-open="isPromotionModalOpened"
+      :current-player="game.currentPlayer"
+      @promote="handlePromotion"
+    />
+    <BoardCheckmateModal
+      :is-open="isCheckmateModalOpened"
+      :current-player="game.currentPlayer"
+    />
+    <BoardStalemateModal
+      :is-open="isStalemateModalOpened"
+    />
   </div>
 </template>
 <script setup lang="ts">
