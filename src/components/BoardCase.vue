@@ -4,6 +4,9 @@
     :data-row="position.row"
     :data-col="position.col"
     class="relative aspect-square"
+    :class="{
+      'border-4': selected
+    }"
     :style="{backgroundColor}"
   >
     <div
@@ -11,7 +14,6 @@
       class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square  opacity-20 rounded-full"
       :class="occupied ? 'h-full border-8 border-neutral-900':'h-1/3 bg-neutral-900'"
     >
-
     </div>
   </div>
 </template>
@@ -26,11 +28,13 @@ const props = withDefaults(
     position: Position,
     color: Color
     active?: boolean;
+    selected?: boolean;
     playable?: boolean;
     occupied?: boolean;
   }>(),
   {
     active: false,
+    selected: false,
     playable: false,
     occupied: false
   }

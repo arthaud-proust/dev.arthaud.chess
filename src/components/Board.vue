@@ -8,6 +8,7 @@
           :position="{col, row}"
           :class="`case-${col}-${row}`"
           :color="caseColor({col, row})"
+          :selected="!!movedPiecePosition && !!hoveredPosition && areSamePositions(hoveredPosition, {col,row})"
           :active="(!!activePosition && areSamePositions(activePosition, {col, row})) || areSamePositions(snapshot.lastMove.origin, {col, row}) || areSamePositions(snapshot.lastMove.destination, {col, row})"
           :playable="!!activePosition && canPlay(snapshot, activePosition, { col, row })"
           :occupied="pieceAt(snapshot.board, {col, row}) !== __"
@@ -108,7 +109,8 @@ const movePiece = (position: Position) => {
   emit("case:click", position);
   movedPiecePosition.value = position;
 };
-const placePiece = () => {
+
+const hoveredPosition = computed(() => {
   const mousePosition = { x: x.value, y: y.value };
 
   const containerSize = container.value?.getBoundingClientRect().height;
@@ -118,11 +120,19 @@ const placePiece = () => {
   const boardCase = elements.find(el => {
     return el instanceof HTMLDivElement && el.dataset.type === "board-case";
   }) as HTMLDivElement | undefined;
+
   if (!boardCase || !boardCase.dataset.col || !boardCase.dataset.row) return;
-  const position = {
+
+  return {
     col: Number.parseInt(boardCase.dataset.col),
     row: Number.parseInt(boardCase.dataset.row)
   };
+});
+
+const placePiece = () => {
+  const position = hoveredPosition.value;
+
+  if (!position) return;
 
   emit("case:click", position);
   movedPiecePosition.value = null;
