@@ -93,10 +93,10 @@ const orientedPositions = computed(() => {
   if (props.horizontal) {
     positions = flipMatrixVertically(rotateMatrix90CounterClockwise(positions));
   } else {
-    positions = flipMatrixHorizontally(flipMatrixVertically(positions));
+    positions = flipMatrixVertically(positions);
 
     if (props.rotate && props.snapshot.currentPlayer === BLACK) {
-      positions = flipMatrixVertically(positions);
+      positions = flipMatrixVertically(flipMatrixHorizontally(positions));
     }
   }
 
@@ -122,7 +122,7 @@ const hoveredPosition = computed(() => {
   const boardCase = elements.find(el => {
     return el instanceof HTMLDivElement && el.dataset.type === "board-case";
   }) as HTMLDivElement | undefined;
-  
+
   if (!boardCase || !boardCase.dataset.col || !boardCase.dataset.row) return;
 
   return {
