@@ -1,5 +1,8 @@
 <template>
   <div
+    data-type="board-case"
+    :data-row="position.row"
+    :data-col="position.col"
     class="relative aspect-square"
     :style="{backgroundColor}"
   >
@@ -13,13 +16,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { BLACK, type Color, WHITE } from "@/core/rules";
+import { BLACK, type Color, type Position, WHITE } from "@/core/rules";
 import { computed } from "vue";
 
 export type CaseState = "initial" | "active"
 
 const props = withDefaults(
   defineProps<{
+    position: Position,
     color: Color
     active?: boolean;
     playable?: boolean;

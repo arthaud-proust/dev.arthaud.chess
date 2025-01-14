@@ -1,35 +1,44 @@
 <template>
-  <div class="overflow-hidden rounded-sm md:rounded-md lg:rounded-lg relative aspect-square"
-       :class="horizontal || (snapshot.currentPlayer === WHITE || !rotate ?'-rotate-90': 'rotate-90')">
+  <div class="overflow-hidden select-none rounded-sm md:rounded-md lg:rounded-lg relative aspect-square">
     <div
       class="aspect-square grid grid-cols-8 grid-rows-8"
     >
-      <template v-for="col in Array(COLS).keys()">
-        <template v-for="row in Array(ROWS).keys()">
-          <BoardCase
-            :class="`case-${col}-${row}`"
-            :color="caseColor({col, row})"
-            :active="(!!activePosition && areSamePositions(activePosition, {col, row})) || areSamePositions(snapshot.lastMove.origin, {col, row}) || areSamePositions(snapshot.lastMove.destination, {col, row})"
-            :playable="!!activePosition && canPlay(snapshot, activePosition, { col, row })"
-            :occupied="pieceAt(snapshot.board, {col, row}) !== __"
-            @click="emit('case:click', {col, row})"
-          />
-        </template>
+      <template v-for="{col, row} in orientedPositions">
+        <BoardCase
+          :position="{col, row}"
+          :class="`case-${col}-${row}`"
+          :color="caseColor({col, row})"
+          :active="(!!activePosition && areSamePositions(activePosition, {col, row})) || areSamePositions(snapshot.lastMove.origin, {col, row}) || areSamePositions(snapshot.lastMove.destination, {col, row})"
+          :playable="!!activePosition && canPlay(snapshot, activePosition, { col, row })"
+          :occupied="pieceAt(snapshot.board, {col, row}) !== __"
+          @click="emit('case:click', {col, row})"
+        />
       </template>
     </div>
 
     <div
       class="pointer-events-none absolute top-0 left-0 h-full w-full aspect-square grid grid-cols-8 grid-rows-8"
+      ref="container"
+      @mouseup="placePiece"
     >
-      <template v-for="col in COLS">
-        <template v-for="row in ROWS">
+      <template v-for="{col, row} in orientedPositions">
+        <div
+          :data-row="row"
+          :data-col="col"
+        >
           <BoardPiece
-            v-if="snapshot.board[col-1]?.[row-1]"
-            :piece="snapshot.board[col-1][row-1]"
-            :style="{gridColumnStart: row, gridRowStart: col}"
-            :class="horizontal || (snapshot.currentPlayer === WHITE || !rotate ?'rotate-90': '-rotate-90')"
+            class="pointer-events-auto"
+            @mousedown="movePiece({col, row})"
+            v-if="snapshot.board[col]?.[row]"
+            :piece="snapshot.board[col][row]"
+            :style="movedPiecePosition && areSamePositions(movedPiecePosition, {col, row})
+               && {top: `${y}px`,left:`${x}px`, width:`12.5%`, transform: 'translate(-100%, -70%)'}
+            "
+            :class="[
+              movedPiecePosition && areSamePositions(movedPiecePosition, {col, row}) && 'absolute'
+            ]"
           />
-        </template>
+        </div>
       </template>
     </div>
   </div>
@@ -39,8 +48,11 @@
 import { __, areSamePositions, BLACK, canPlay, COLS, type GameSnapshot, pieceAt, type Position, ROWS, WHITE } from "@/core/rules.ts";
 import BoardCase from "@/components/BoardCase.vue";
 import BoardPiece from "@/components/BoardPiece.vue";
+import { computed, ref } from "vue";
+import { useMouseInElement } from "@vueuse/core";
+import { flipMatrixHorizontally, flipMatrixVertically, rotateMatrix90CounterClockwise } from "@/utils/matrix.ts";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     snapshot: GameSnapshot
     activePosition?: Position
@@ -56,6 +68,65 @@ withDefaults(
 const emit = defineEmits<{
   "case:click": [Position]
 }>();
+
+const positionsMatrix = () => {
+  const matrix: Position[][] = [];
+  for (let row = 0; row < ROWS; row++) {
+    const matrixRow = [];
+    for (let col = 0; col < COLS; col++) {
+      matrixRow.push({ col, row });
+    }
+    matrix.push(matrixRow);
+  }
+
+  return matrix;
+};
+
+const matrixToArray = <T>(matrix: T[][]) => matrix.flatMap(row => row);
+
+const orientedPositions = computed(() => {
+  let positions = positionsMatrix();
+
+  if (props.horizontal) {
+    positions = flipMatrixVertically(rotateMatrix90CounterClockwise(positions));
+  } else {
+    positions = flipMatrixHorizontally(flipMatrixVertically(positions));
+
+    if (props.rotate && props.snapshot.currentPlayer === BLACK) {
+      positions = flipMatrixVertically(positions);
+    }
+  }
+
+  return matrixToArray(positions);
+});
+
+const container = ref<HTMLDivElement>();
+const { x, y } = useMouseInElement(container);
+
+const movedPiecePosition = ref<Position | null>(null);
+const movePiece = (position: Position) => {
+  emit("case:click", position);
+  movedPiecePosition.value = position;
+};
+const placePiece = () => {
+  const mousePosition = { x: x.value, y: y.value };
+
+  const containerSize = container.value?.getBoundingClientRect().height;
+  if (!containerSize) return;
+
+  const elements = document.elementsFromPoint(mousePosition.x, mousePosition.y);
+  const boardCase = elements.find(el => {
+    return el instanceof HTMLDivElement && el.dataset.type === "board-case";
+  }) as HTMLDivElement | undefined;
+  if (!boardCase || !boardCase.dataset.col || !boardCase.dataset.row) return;
+  const position = {
+    col: Number.parseInt(boardCase.dataset.col),
+    row: Number.parseInt(boardCase.dataset.row)
+  };
+
+  emit("case:click", position);
+  movedPiecePosition.value = null;
+};
 
 const isEven = (x: number) => (x % 2) == 0;
 const caseColor = ({ row, col }: Position) => {
