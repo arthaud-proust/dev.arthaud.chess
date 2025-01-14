@@ -32,6 +32,11 @@
               <input type="checkbox" v-model="rotate">
               <span>Rotate</span>
             </label>
+
+            <button @click="game.undo()" v-if="game.canUndo" v-tooltip="'Undo last move'" class="bg-neutral-100 rounded-md px-4 py-2">
+              Undo
+            </button>
+
             <button @click="savedSnapshot.reset()" v-tooltip="'Reset board for a new game'" class="bg-red-100 text-red-800 rounded-md px-4 py-2">
               New game
             </button>

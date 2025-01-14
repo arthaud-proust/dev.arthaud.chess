@@ -12,9 +12,11 @@ import {
 } from "./rules.ts";
 
 export class Game {
+  private history: Array<GameSnapshot>;
   private _snapshot: GameSnapshot;
 
   constructor(snapshot: GameSnapshot) {
+    this.history = [];
     this._snapshot = snapshot;
   }
 
@@ -23,6 +25,7 @@ export class Game {
   }
 
   play({ origin, destination }: Move) {
+    this.history.unshift(this._snapshot);
     this._snapshot = play(this._snapshot, origin, destination);
   }
 
@@ -31,6 +34,7 @@ export class Game {
   }
 
   promoteTo(position: Position, piece: Piece) {
+    this.history.unshift(this._snapshot);
     this._snapshot = promoteTo(this._snapshot, position, piece);
   }
 
@@ -44,5 +48,17 @@ export class Game {
 
   get snapshot() {
     return copyOfGameSnapshot(this._snapshot);
+  }
+
+  get canUndo() {
+    return this.history.length > 0;
+  }
+
+  undo() {
+    const lastSnapshot = this.history.shift();
+
+    if (lastSnapshot) {
+      this._snapshot = lastSnapshot;
+    }
   }
 }
