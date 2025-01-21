@@ -1,34 +1,33 @@
 {
-    "name": "chess",
-    "private": true,
-    "version": "0.0.0",
-    "type": "module",
-    "scripts": {
-        "dev": "vite",
-        "build": "vue-tsc -b && vite build",
-        "preview": "vite preview",
-        "test": "vitest",
-        "test:smoke": "vue-tsc -b",
-        "test:unit": "vitest run",
-        "prepare": "husky"
-    },
-    "dependencies": {
-        "@headlessui/vue": "^1.7.23",
-        "@vueuse/core": "^12.4.0",
-        "floating-vue": "^5.2.2",
-        "vue": "^3.5.13"
-    },
-    "devDependencies": {
-        "@types/node": "^22.10.5",
-        "@vitejs/plugin-vue": "^5.2.1",
-        "@vue/tsconfig": "^0.7.0",
-        "autoprefixer": "^10.4.20",
-        "husky": "^9.1.7",
-        "postcss": "^8.4.49",
-        "tailwindcss": "^3.4.17",
-        "typescript": "~5.6.2",
-        "vite": "^6.0.5",
-        "vitest": "^2.1.8",
-        "vue-tsc": "^2.2.0"
-    }
+  "name": "chess",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "vitest",
+    "test:smoke": "npx nuxi typecheck",
+    "test:unit": "vitest run",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@nuxt/test-utils": "^3.15.4",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^16.7.1",
+    "husky": "^9.1.7",
+    "nuxt": "^3.15.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.2",
+    "vue-tsc": "^2.2.0"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.23",
+    "@nuxtjs/tailwindcss": "6.13.1",
+    "@vueuse/core": "^12.4.0",
+    "floating-vue": "^5.2.2"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

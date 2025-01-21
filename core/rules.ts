@@ -4,9 +4,9 @@ export const BLACK = 2;
 export const Colors = Object.freeze({
   NONE,
   WHITE,
-  BLACK
+  BLACK,
 });
-export type Color = typeof Colors[keyof typeof Colors];
+export type Color = (typeof Colors)[keyof typeof Colors];
 
 export const __ = 0;
 export const WK = 4; // White King
@@ -34,9 +34,9 @@ export const Pieces = Object.freeze({
   BB,
   BR,
   BN,
-  BP
+  BP,
 });
-export type Piece = typeof Pieces[keyof typeof Pieces]
+export type Piece = (typeof Pieces)[keyof typeof Pieces];
 
 export const TOP_LEFT = 1;
 export const TOP = 2;
@@ -54,9 +54,9 @@ export const Directions = Object.freeze({
   BOTTOM_RIGHT: 5,
   BOTTOM: 6,
   BOTTOM_LEFT: 7,
-  LEFT: 8
+  LEFT: 8,
 });
-export type Direction = typeof Directions[keyof typeof Directions]
+export type Direction = (typeof Directions)[keyof typeof Directions];
 
 export type Position = {
   col: number;
@@ -112,28 +112,28 @@ export const WHITE_CASTLING_KING_SIDE: CastlingPositions = {
   kingOrigin: { col: 4, row: 0 },
   kingDestination: { col: 6, row: 0 },
   rookOrigin: { col: 7, row: 0 },
-  rookDestination: { col: 5, row: 0 }
+  rookDestination: { col: 5, row: 0 },
 };
 
 export const WHITE_CASTLING_QUEEN_SIDE: CastlingPositions = {
   kingOrigin: { col: 4, row: 0 },
   kingDestination: { col: 2, row: 0 },
   rookOrigin: { col: 0, row: 0 },
-  rookDestination: { col: 3, row: 0 }
+  rookDestination: { col: 3, row: 0 },
 };
 
 export const BLACK_CASTLING_KING_SIDE: CastlingPositions = {
   kingOrigin: { col: 4, row: 7 },
   kingDestination: { col: 6, row: 7 },
   rookOrigin: { col: 7, row: 7 },
-  rookDestination: { col: 5, row: 7 }
+  rookDestination: { col: 5, row: 7 },
 };
 
 export const BLACK_CASTLING_QUEEN_SIDE: CastlingPositions = {
   kingOrigin: { col: 4, row: 7 },
   kingDestination: { col: 2, row: 7 },
   rookOrigin: { col: 0, row: 7 },
-  rookDestination: { col: 3, row: 7 }
+  rookDestination: { col: 3, row: 7 },
 };
 
 export function areSamePositions(a: Position, b: Position): boolean {
@@ -143,52 +143,48 @@ export function areSamePositions(a: Position, b: Position): boolean {
 export function withSameRow(position: Position, col: number): Position {
   return {
     col,
-    row: position.row
+    row: position.row,
   };
 }
 
 export function withSameCol(position: Position, row: number): Position {
   return {
     col: position.col,
-    row
+    row,
   };
 }
 
-function atDirection(position: Position, direction: Direction, distance: number): Position {
+function atDirection(
+  position: Position,
+  direction: Direction,
+  distance: number,
+): Position {
   const newPosition: Position = {
     col: position.col,
-    row: position.row
+    row: position.row,
   };
 
-  if (
-    direction == TOP_LEFT
-    || direction == TOP
-    || direction == TOP_RIGHT
-  ) {
+  if (direction == TOP_LEFT || direction == TOP || direction == TOP_RIGHT) {
     newPosition.row += distance;
   }
 
   if (
-    direction == BOTTOM_LEFT
-    || direction == BOTTOM
-    || direction == BOTTOM_RIGHT
+    direction == BOTTOM_LEFT ||
+    direction == BOTTOM ||
+    direction == BOTTOM_RIGHT
   ) {
     newPosition.row -= distance;
   }
 
   if (
-    direction == BOTTOM_RIGHT
-    || direction == RIGHT
-    || direction == TOP_RIGHT
+    direction == BOTTOM_RIGHT ||
+    direction == RIGHT ||
+    direction == TOP_RIGHT
   ) {
     newPosition.col += distance;
   }
 
-  if (
-    direction == BOTTOM_LEFT
-    || direction == LEFT
-    || direction == TOP_LEFT
-  ) {
+  if (direction == BOTTOM_LEFT || direction == LEFT || direction == TOP_LEFT) {
     newPosition.col -= distance;
   }
 
@@ -224,7 +220,11 @@ export function pieceColor(piece: Piece): Color {
   }
 }
 
-function moveTo(board: GameBoard, origin: Position, destination: Position): void {
+function moveTo(
+  board: GameBoard,
+  origin: Position,
+  destination: Position,
+): void {
   board[destination.col][destination.row] = board[origin.col][origin.row];
   board[origin.col][origin.row] = __;
 }
@@ -252,17 +252,21 @@ export function copyOfGameSnapshot(gameSnapshot: GameSnapshot): GameSnapshot {
 
   newGameSnapshot.lastMove.origin = {
     row: gameSnapshot.lastMove.origin.row,
-    col: gameSnapshot.lastMove.origin.col
+    col: gameSnapshot.lastMove.origin.col,
   };
   newGameSnapshot.lastMove.destination = {
     row: gameSnapshot.lastMove.destination.row,
-    col: gameSnapshot.lastMove.destination.col
+    col: gameSnapshot.lastMove.destination.col,
   };
 
   return newGameSnapshot;
 }
 
-function appliedMove(gameSnapshot: GameSnapshot, origin: Position, destination: Position): GameSnapshot {
+function appliedMove(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+  destination: Position,
+): GameSnapshot {
   const nextGameSnapshot: GameSnapshot = copyOfGameSnapshot(gameSnapshot);
 
   const pieceMoved: Piece = pieceAt(gameSnapshot.board, origin);
@@ -271,67 +275,83 @@ function appliedMove(gameSnapshot: GameSnapshot, origin: Position, destination: 
   moveTo(nextGameSnapshot.board, origin, destination);
 
   if (
-    pieceMoved == WP
-    && !pieceAtDestination
-    && origin.row == BLACK_PAWN_START_JUMP_ROW
-    && (
-      areSamePositions(destination, atDirection(origin, TOP_LEFT, 1))
-      || areSamePositions(destination, atDirection(origin, TOP_RIGHT, 1))
-    )
-    && pieceAt(gameSnapshot.board, gameSnapshot.lastMove.destination) == BP
-    && gameSnapshot.lastMove.origin.row == BLACK_PAWN_START_ROW
-    && gameSnapshot.lastMove.destination.row == BLACK_PAWN_START_JUMP_ROW
-    && destination.col == gameSnapshot.lastMove.destination.col
+    pieceMoved == WP &&
+    !pieceAtDestination &&
+    origin.row == BLACK_PAWN_START_JUMP_ROW &&
+    (areSamePositions(destination, atDirection(origin, TOP_LEFT, 1)) ||
+      areSamePositions(destination, atDirection(origin, TOP_RIGHT, 1))) &&
+    pieceAt(gameSnapshot.board, gameSnapshot.lastMove.destination) == BP &&
+    gameSnapshot.lastMove.origin.row == BLACK_PAWN_START_ROW &&
+    gameSnapshot.lastMove.destination.row == BLACK_PAWN_START_JUMP_ROW &&
+    destination.col == gameSnapshot.lastMove.destination.col
   ) {
-    nextGameSnapshot.board[gameSnapshot.lastMove.destination.col][gameSnapshot.lastMove.destination.row] = __;
+    nextGameSnapshot.board[gameSnapshot.lastMove.destination.col][
+      gameSnapshot.lastMove.destination.row
+    ] = __;
   }
 
   if (
-    pieceMoved == BP
-    && !pieceAtDestination
-    && origin.row == WHITE_PAWN_START_JUMP_ROW
-    && (
-      areSamePositions(destination, atDirection(origin, BOTTOM_LEFT, 1))
-      || areSamePositions(destination, atDirection(origin, BOTTOM_RIGHT, 1))
-    )
-    && pieceAt(gameSnapshot.board, gameSnapshot.lastMove.destination) == WP
-    && gameSnapshot.lastMove.origin.row == WHITE_PAWN_START_ROW
-    && gameSnapshot.lastMove.destination.row == WHITE_PAWN_START_JUMP_ROW
-    && destination.col == gameSnapshot.lastMove.destination.col
+    pieceMoved == BP &&
+    !pieceAtDestination &&
+    origin.row == WHITE_PAWN_START_JUMP_ROW &&
+    (areSamePositions(destination, atDirection(origin, BOTTOM_LEFT, 1)) ||
+      areSamePositions(destination, atDirection(origin, BOTTOM_RIGHT, 1))) &&
+    pieceAt(gameSnapshot.board, gameSnapshot.lastMove.destination) == WP &&
+    gameSnapshot.lastMove.origin.row == WHITE_PAWN_START_ROW &&
+    gameSnapshot.lastMove.destination.row == WHITE_PAWN_START_JUMP_ROW &&
+    destination.col == gameSnapshot.lastMove.destination.col
   ) {
-    nextGameSnapshot.board[gameSnapshot.lastMove.destination.col][gameSnapshot.lastMove.destination.row] = __;
+    nextGameSnapshot.board[gameSnapshot.lastMove.destination.col][
+      gameSnapshot.lastMove.destination.row
+    ] = __;
   }
 
   if (
-    pieceMoved == WK
-    && areSamePositions(origin, WHITE_CASTLING_KING_SIDE.kingOrigin)
-    && areSamePositions(destination, WHITE_CASTLING_KING_SIDE.kingDestination)
+    pieceMoved == WK &&
+    areSamePositions(origin, WHITE_CASTLING_KING_SIDE.kingOrigin) &&
+    areSamePositions(destination, WHITE_CASTLING_KING_SIDE.kingDestination)
   ) {
-    moveTo(nextGameSnapshot.board, WHITE_CASTLING_KING_SIDE.rookOrigin, WHITE_CASTLING_KING_SIDE.rookDestination);
+    moveTo(
+      nextGameSnapshot.board,
+      WHITE_CASTLING_KING_SIDE.rookOrigin,
+      WHITE_CASTLING_KING_SIDE.rookDestination,
+    );
   }
 
   if (
-    pieceMoved == WK
-    && areSamePositions(origin, WHITE_CASTLING_QUEEN_SIDE.kingOrigin)
-    && areSamePositions(destination, WHITE_CASTLING_QUEEN_SIDE.kingDestination)
+    pieceMoved == WK &&
+    areSamePositions(origin, WHITE_CASTLING_QUEEN_SIDE.kingOrigin) &&
+    areSamePositions(destination, WHITE_CASTLING_QUEEN_SIDE.kingDestination)
   ) {
-    moveTo(nextGameSnapshot.board, WHITE_CASTLING_QUEEN_SIDE.rookOrigin, WHITE_CASTLING_QUEEN_SIDE.rookDestination);
+    moveTo(
+      nextGameSnapshot.board,
+      WHITE_CASTLING_QUEEN_SIDE.rookOrigin,
+      WHITE_CASTLING_QUEEN_SIDE.rookDestination,
+    );
   }
 
   if (
-    pieceMoved == BK
-    && areSamePositions(origin, BLACK_CASTLING_KING_SIDE.kingOrigin)
-    && areSamePositions(destination, BLACK_CASTLING_KING_SIDE.kingDestination)
+    pieceMoved == BK &&
+    areSamePositions(origin, BLACK_CASTLING_KING_SIDE.kingOrigin) &&
+    areSamePositions(destination, BLACK_CASTLING_KING_SIDE.kingDestination)
   ) {
-    moveTo(nextGameSnapshot.board, BLACK_CASTLING_KING_SIDE.rookOrigin, BLACK_CASTLING_KING_SIDE.rookDestination);
+    moveTo(
+      nextGameSnapshot.board,
+      BLACK_CASTLING_KING_SIDE.rookOrigin,
+      BLACK_CASTLING_KING_SIDE.rookDestination,
+    );
   }
 
   if (
-    pieceMoved == BK
-    && areSamePositions(origin, BLACK_CASTLING_QUEEN_SIDE.kingOrigin)
-    && areSamePositions(destination, BLACK_CASTLING_QUEEN_SIDE.kingDestination)
+    pieceMoved == BK &&
+    areSamePositions(origin, BLACK_CASTLING_QUEEN_SIDE.kingOrigin) &&
+    areSamePositions(destination, BLACK_CASTLING_QUEEN_SIDE.kingDestination)
   ) {
-    moveTo(nextGameSnapshot.board, BLACK_CASTLING_QUEEN_SIDE.rookOrigin, BLACK_CASTLING_QUEEN_SIDE.rookDestination);
+    moveTo(
+      nextGameSnapshot.board,
+      BLACK_CASTLING_QUEEN_SIDE.rookOrigin,
+      BLACK_CASTLING_QUEEN_SIDE.rookDestination,
+    );
   }
 
   if (pieceMoved == WK || pieceMoved == WR) {
@@ -343,7 +363,8 @@ function appliedMove(gameSnapshot: GameSnapshot, origin: Position, destination: 
   }
 
   if (!canPromote(nextGameSnapshot, destination)) {
-    nextGameSnapshot.currentPlayer = gameSnapshot.currentPlayer == WHITE ? BLACK : WHITE;
+    nextGameSnapshot.currentPlayer =
+      gameSnapshot.currentPlayer == WHITE ? BLACK : WHITE;
   }
 
   nextGameSnapshot.lastMove.origin = origin;
@@ -352,11 +373,16 @@ function appliedMove(gameSnapshot: GameSnapshot, origin: Position, destination: 
   return nextGameSnapshot;
 }
 
-function appliedPromotion(gameSnapshot: GameSnapshot, origin: Position, promotion: Piece): GameSnapshot {
+function appliedPromotion(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+  promotion: Piece,
+): GameSnapshot {
   const nextGameSnapshot: GameSnapshot = copyOfGameSnapshot(gameSnapshot);
 
   nextGameSnapshot.board[origin.col][origin.row] = promotion;
-  nextGameSnapshot.currentPlayer = gameSnapshot.currentPlayer == WHITE ? BLACK : WHITE;
+  nextGameSnapshot.currentPlayer =
+    gameSnapshot.currentPlayer == WHITE ? BLACK : WHITE;
 
   return nextGameSnapshot;
 }
@@ -376,7 +402,11 @@ export function positionOfPiece(board: GameBoard, piece: Piece): Position {
   return position;
 }
 
-export function isEmptyAtColRow(board: GameBoard, col: number, row: number): boolean {
+export function isEmptyAtColRow(
+  board: GameBoard,
+  col: number,
+  row: number,
+): boolean {
   return pieceAtColRow(board, col, row) == __;
 }
 
@@ -384,7 +414,11 @@ export function isEmptyAt(board: GameBoard, position: Position): boolean {
   return pieceAt(board, position) == __;
 }
 
-function isColumnEmptyBetween(board: GameBoard, start: Position, end: Position): boolean {
+function isColumnEmptyBetween(
+  board: GameBoard,
+  start: Position,
+  end: Position,
+): boolean {
   if (start.col != end.col) {
     return false;
   }
@@ -401,7 +435,11 @@ function isColumnEmptyBetween(board: GameBoard, start: Position, end: Position):
   return true;
 }
 
-function isRowEmptyBetween(board: GameBoard, start: Position, end: Position): boolean {
+function isRowEmptyBetween(
+  board: GameBoard,
+  start: Position,
+  end: Position,
+): boolean {
   if (start.row != end.row) {
     return false;
   }
@@ -418,7 +456,11 @@ function isRowEmptyBetween(board: GameBoard, start: Position, end: Position): bo
   return true;
 }
 
-function isDiagonalEmptyBetween(board: GameBoard, start: Position, end: Position): boolean {
+function isDiagonalEmptyBetween(
+  board: GameBoard,
+  start: Position,
+  end: Position,
+): boolean {
   const dx: number = end.col - start.col;
   const dy: number = end.row - start.row;
 
@@ -442,10 +484,19 @@ function isDiagonalEmptyBetween(board: GameBoard, start: Position, end: Position
 }
 
 function isPositionOnBoard(position: Position): boolean {
-  return 0 <= position.col && position.col < COLS && 0 <= position.row && position.row < ROWS;
+  return (
+    0 <= position.col &&
+    position.col < COLS &&
+    0 <= position.row &&
+    position.row < ROWS
+  );
 }
 
-function isMoveValid(gameSnapshot: GameSnapshot, origin: Position, destination: Position): boolean {
+function isMoveValid(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+  destination: Position,
+): boolean {
   const pieceAtOrigin: Piece = pieceAt(gameSnapshot.board, origin);
   const pieceColorAtOrigin: Color = pieceColor(pieceAtOrigin);
   const pieceAtDestination: Piece = pieceAt(gameSnapshot.board, destination);
@@ -465,28 +516,28 @@ function isMoveValid(gameSnapshot: GameSnapshot, origin: Position, destination: 
 
   if (pieceAtOrigin == WP) {
     if (pieceAtDestination) {
-      return areSamePositions(destination, atDirection(origin, TOP_LEFT, 1))
-        || areSamePositions(destination, atDirection(origin, TOP_RIGHT, 1));
+      return (
+        areSamePositions(destination, atDirection(origin, TOP_LEFT, 1)) ||
+        areSamePositions(destination, atDirection(origin, TOP_RIGHT, 1))
+      );
     }
 
     if (
-      origin.row == WHITE_PAWN_START_ROW
-      && destination.row == WHITE_PAWN_START_JUMP_ROW
-      && isColumnEmptyBetween(gameSnapshot.board, origin, destination)
+      origin.row == WHITE_PAWN_START_ROW &&
+      destination.row == WHITE_PAWN_START_JUMP_ROW &&
+      isColumnEmptyBetween(gameSnapshot.board, origin, destination)
     ) {
       return true;
     }
 
     if (
-      origin.row == BLACK_PAWN_START_JUMP_ROW
-      && (
-        areSamePositions(destination, atDirection(origin, TOP_LEFT, 1))
-        || areSamePositions(destination, atDirection(origin, TOP_RIGHT, 1))
-      )
-      && pieceAt(gameSnapshot.board, gameSnapshot.lastMove.destination) == BP
-      && gameSnapshot.lastMove.origin.row == BLACK_PAWN_START_ROW
-      && gameSnapshot.lastMove.destination.row == BLACK_PAWN_START_JUMP_ROW
-      && destination.col == gameSnapshot.lastMove.destination.col
+      origin.row == BLACK_PAWN_START_JUMP_ROW &&
+      (areSamePositions(destination, atDirection(origin, TOP_LEFT, 1)) ||
+        areSamePositions(destination, atDirection(origin, TOP_RIGHT, 1))) &&
+      pieceAt(gameSnapshot.board, gameSnapshot.lastMove.destination) == BP &&
+      gameSnapshot.lastMove.origin.row == BLACK_PAWN_START_ROW &&
+      gameSnapshot.lastMove.destination.row == BLACK_PAWN_START_JUMP_ROW &&
+      destination.col == gameSnapshot.lastMove.destination.col
     ) {
       return true;
     }
@@ -496,28 +547,28 @@ function isMoveValid(gameSnapshot: GameSnapshot, origin: Position, destination: 
 
   if (pieceAtOrigin == BP) {
     if (pieceAtDestination) {
-      return areSamePositions(destination, atDirection(origin, BOTTOM_LEFT, 1))
-        || areSamePositions(destination, atDirection(origin, BOTTOM_RIGHT, 1));
+      return (
+        areSamePositions(destination, atDirection(origin, BOTTOM_LEFT, 1)) ||
+        areSamePositions(destination, atDirection(origin, BOTTOM_RIGHT, 1))
+      );
     }
 
     if (
-      origin.row == BLACK_PAWN_START_ROW
-      && destination.row == BLACK_PAWN_START_JUMP_ROW
-      && isColumnEmptyBetween(gameSnapshot.board, origin, destination)
+      origin.row == BLACK_PAWN_START_ROW &&
+      destination.row == BLACK_PAWN_START_JUMP_ROW &&
+      isColumnEmptyBetween(gameSnapshot.board, origin, destination)
     ) {
       return true;
     }
 
     if (
-      origin.row == WHITE_PAWN_START_JUMP_ROW
-      && (
-        areSamePositions(destination, atDirection(origin, BOTTOM_LEFT, 1))
-        || areSamePositions(destination, atDirection(origin, BOTTOM_RIGHT, 1))
-      )
-      && pieceAt(gameSnapshot.board, gameSnapshot.lastMove.destination) == WP
-      && gameSnapshot.lastMove.origin.row == WHITE_PAWN_START_ROW
-      && gameSnapshot.lastMove.destination.row == WHITE_PAWN_START_JUMP_ROW
-      && destination.col == gameSnapshot.lastMove.destination.col
+      origin.row == WHITE_PAWN_START_JUMP_ROW &&
+      (areSamePositions(destination, atDirection(origin, BOTTOM_LEFT, 1)) ||
+        areSamePositions(destination, atDirection(origin, BOTTOM_RIGHT, 1))) &&
+      pieceAt(gameSnapshot.board, gameSnapshot.lastMove.destination) == WP &&
+      gameSnapshot.lastMove.origin.row == WHITE_PAWN_START_ROW &&
+      gameSnapshot.lastMove.destination.row == WHITE_PAWN_START_JUMP_ROW &&
+      destination.col == gameSnapshot.lastMove.destination.col
     ) {
       return true;
     }
@@ -526,41 +577,75 @@ function isMoveValid(gameSnapshot: GameSnapshot, origin: Position, destination: 
   }
 
   if (pieceAtOrigin == WN || pieceAtOrigin == BN) {
-    return (rowsBetween(origin, destination) == 2 && colsBetween(origin, destination) == 1)
-      || (rowsBetween(origin, destination) == 1 && colsBetween(origin, destination) == 2);
+    return (
+      (rowsBetween(origin, destination) == 2 &&
+        colsBetween(origin, destination) == 1) ||
+      (rowsBetween(origin, destination) == 1 &&
+        colsBetween(origin, destination) == 2)
+    );
   }
 
   if (pieceAtOrigin == WK || pieceAtOrigin == BK) {
-    const kingSide: CastlingPositions = gameSnapshot.currentPlayer == WHITE ? WHITE_CASTLING_KING_SIDE : BLACK_CASTLING_KING_SIDE;
-    const queenSide: CastlingPositions = gameSnapshot.currentPlayer == WHITE ? WHITE_CASTLING_QUEEN_SIDE : BLACK_CASTLING_QUEEN_SIDE;
-    const hasLostCastling: boolean = gameSnapshot.currentPlayer == WHITE ? gameSnapshot.hasWhiteLostCastling : gameSnapshot.hasBlackLostCastling;
+    const kingSide: CastlingPositions =
+      gameSnapshot.currentPlayer == WHITE
+        ? WHITE_CASTLING_KING_SIDE
+        : BLACK_CASTLING_KING_SIDE;
+    const queenSide: CastlingPositions =
+      gameSnapshot.currentPlayer == WHITE
+        ? WHITE_CASTLING_QUEEN_SIDE
+        : BLACK_CASTLING_QUEEN_SIDE;
+    const hasLostCastling: boolean =
+      gameSnapshot.currentPlayer == WHITE
+        ? gameSnapshot.hasWhiteLostCastling
+        : gameSnapshot.hasBlackLostCastling;
 
-    const isCastlingKingSide = areSamePositions(origin, kingSide.kingOrigin) && areSamePositions(destination, kingSide.kingDestination);
+    const isCastlingKingSide =
+      areSamePositions(origin, kingSide.kingOrigin) &&
+      areSamePositions(destination, kingSide.kingDestination);
     if (isCastlingKingSide) {
       const nextSnapshot = appliedMove(gameSnapshot, origin, destination);
 
-      return !hasLostCastling
-        && isRowEmptyBetween(gameSnapshot.board, kingSide.kingOrigin, kingSide.rookOrigin)
-        && !isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer)
-        && !isPieceThreatened(nextSnapshot, kingSide.rookDestination);
+      return (
+        !hasLostCastling &&
+        isRowEmptyBetween(
+          gameSnapshot.board,
+          kingSide.kingOrigin,
+          kingSide.rookOrigin,
+        ) &&
+        !isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer) &&
+        !isPieceThreatened(nextSnapshot, kingSide.rookDestination)
+      );
     }
 
-    const isCastlingQueenSide = areSamePositions(origin, queenSide.kingOrigin) && areSamePositions(destination, queenSide.kingDestination);
+    const isCastlingQueenSide =
+      areSamePositions(origin, queenSide.kingOrigin) &&
+      areSamePositions(destination, queenSide.kingDestination);
     if (isCastlingQueenSide) {
       const nextSnapshot = appliedMove(gameSnapshot, origin, destination);
 
-      return !hasLostCastling
-        && isRowEmptyBetween(gameSnapshot.board, queenSide.kingOrigin, queenSide.rookOrigin)
-        && !isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer)
-        && !isPieceThreatened(nextSnapshot, queenSide.rookDestination);
+      return (
+        !hasLostCastling &&
+        isRowEmptyBetween(
+          gameSnapshot.board,
+          queenSide.kingOrigin,
+          queenSide.rookOrigin,
+        ) &&
+        !isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer) &&
+        !isPieceThreatened(nextSnapshot, queenSide.rookDestination)
+      );
     }
 
-    return rowsBetween(origin, destination) <= 1 && colsBetween(origin, destination) <= 1;
+    return (
+      rowsBetween(origin, destination) <= 1 &&
+      colsBetween(origin, destination) <= 1
+    );
   }
 
   if (pieceAtOrigin == WR || pieceAtOrigin == BR) {
-    return isRowEmptyBetween(gameSnapshot.board, origin, destination)
-      || isColumnEmptyBetween(gameSnapshot.board, origin, destination);
+    return (
+      isRowEmptyBetween(gameSnapshot.board, origin, destination) ||
+      isColumnEmptyBetween(gameSnapshot.board, origin, destination)
+    );
   }
 
   if (pieceAtOrigin == WB || pieceAtOrigin == BB) {
@@ -568,15 +653,20 @@ function isMoveValid(gameSnapshot: GameSnapshot, origin: Position, destination: 
   }
 
   if (pieceAtOrigin == WQ || pieceAtOrigin == BQ) {
-    return isRowEmptyBetween(gameSnapshot.board, origin, destination)
-      || isColumnEmptyBetween(gameSnapshot.board, origin, destination)
-      || isDiagonalEmptyBetween(gameSnapshot.board, origin, destination);
+    return (
+      isRowEmptyBetween(gameSnapshot.board, origin, destination) ||
+      isColumnEmptyBetween(gameSnapshot.board, origin, destination) ||
+      isDiagonalEmptyBetween(gameSnapshot.board, origin, destination)
+    );
   }
 
   return false;
 }
 
-function isPieceThreatened(gameSnapshot: GameSnapshot, piece: Position): boolean {
+function isPieceThreatened(
+  gameSnapshot: GameSnapshot,
+  piece: Position,
+): boolean {
   if (!isPositionOnBoard(piece)) {
     return false;
   }
@@ -600,14 +690,26 @@ function isPieceThreatened(gameSnapshot: GameSnapshot, piece: Position): boolean
   return false;
 }
 
-export function isPlayerInCheck(gameSnapshot: GameSnapshot, player: Color): boolean {
-  const kingPosition: Position = positionOfPiece(gameSnapshot.board, player == WHITE ? WK : BK);
+export function isPlayerInCheck(
+  gameSnapshot: GameSnapshot,
+  player: Color,
+): boolean {
+  const kingPosition: Position = positionOfPiece(
+    gameSnapshot.board,
+    player == WHITE ? WK : BK,
+  );
 
   return isPieceThreatened(gameSnapshot, kingPosition);
 }
 
-function canPlayWithoutBeingInCheck(gameSnapshot: GameSnapshot, origin: Position, destination: Position): boolean {
-  const pieceColorAtOrigin: Color = pieceColor(pieceAt(gameSnapshot.board, origin));
+function canPlayWithoutBeingInCheck(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+  destination: Position,
+): boolean {
+  const pieceColorAtOrigin: Color = pieceColor(
+    pieceAt(gameSnapshot.board, origin),
+  );
 
   if (pieceColorAtOrigin != gameSnapshot.currentPlayer) {
     return false;
@@ -617,7 +719,11 @@ function canPlayWithoutBeingInCheck(gameSnapshot: GameSnapshot, origin: Position
     return false;
   }
 
-  const nextSnapshot: GameSnapshot = appliedMove(gameSnapshot, origin, destination);
+  const nextSnapshot: GameSnapshot = appliedMove(
+    gameSnapshot,
+    origin,
+    destination,
+  );
 
   return !isPlayerInCheck(nextSnapshot, gameSnapshot.currentPlayer);
 }
@@ -634,7 +740,10 @@ export function isCurrentPlayerStalemated(gameSnapshot: GameSnapshot): boolean {
 
       originPiece = pieceAt(gameSnapshot.board, origin);
 
-      if (originPiece == __ && pieceColor(originPiece) != gameSnapshot.currentPlayer) {
+      if (
+        originPiece == __ &&
+        pieceColor(originPiece) != gameSnapshot.currentPlayer
+      ) {
         continue;
       }
 
@@ -655,14 +764,27 @@ export function isCurrentPlayerStalemated(gameSnapshot: GameSnapshot): boolean {
 }
 
 export function isCurrentPlayerCheckmated(gameSnapshot: GameSnapshot): boolean {
-  return isCurrentPlayerStalemated(gameSnapshot) && isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer);
+  return (
+    isCurrentPlayerStalemated(gameSnapshot) &&
+    isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer)
+  );
 }
 
-export function canPlay(gameSnapshot: GameSnapshot, origin: Position, destination: Position): boolean {
-  return canPlayWithoutBeingInCheck(gameSnapshot, origin, destination) && !isCurrentPlayerCheckmated(gameSnapshot);
+export function canPlay(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+  destination: Position,
+): boolean {
+  return (
+    canPlayWithoutBeingInCheck(gameSnapshot, origin, destination) &&
+    !isCurrentPlayerCheckmated(gameSnapshot)
+  );
 }
 
-export function canPromote(gameSnapshot: GameSnapshot, origin: Position): boolean {
+export function canPromote(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+): boolean {
   const piece: Piece = pieceAt(gameSnapshot.board, origin);
   const color: Color = pieceColor(piece);
 
@@ -682,23 +804,35 @@ export function canPromote(gameSnapshot: GameSnapshot, origin: Position): boolea
 }
 
 function isAPromotionPiece(piece: Piece): boolean {
-  return piece == WQ
-    || piece == WB
-    || piece == WR
-    || piece == WN
-    || piece == BQ
-    || piece == BB
-    || piece == BR
-    || piece == BN;
+  return (
+    piece == WQ ||
+    piece == WB ||
+    piece == WR ||
+    piece == WN ||
+    piece == BQ ||
+    piece == BB ||
+    piece == BR ||
+    piece == BN
+  );
 }
 
-export function canPromoteTo(gameSnapshot: GameSnapshot, origin: Position, promotion: Piece): boolean {
-  return canPromote(gameSnapshot, origin)
-    && pieceColor(promotion) == gameSnapshot.currentPlayer
-    && isAPromotionPiece(promotion);
+export function canPromoteTo(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+  promotion: Piece,
+): boolean {
+  return (
+    canPromote(gameSnapshot, origin) &&
+    pieceColor(promotion) == gameSnapshot.currentPlayer &&
+    isAPromotionPiece(promotion)
+  );
 }
 
-export function play(gameSnapshot: GameSnapshot, origin: Position, destination: Position): GameSnapshot {
+export function play(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+  destination: Position,
+): GameSnapshot {
   if (!canPlay(gameSnapshot, origin, destination)) {
     throw new Error("Can't play this move");
   }
@@ -706,7 +840,11 @@ export function play(gameSnapshot: GameSnapshot, origin: Position, destination: 
   return appliedMove(gameSnapshot, origin, destination);
 }
 
-export function promoteTo(gameSnapshot: GameSnapshot, origin: Position, promotion: Piece): GameSnapshot {
+export function promoteTo(
+  gameSnapshot: GameSnapshot,
+  origin: Position,
+  promotion: Piece,
+): GameSnapshot {
   if (!canPromote(gameSnapshot, origin)) {
     throw new Error("Can't promote to this piece");
   }
@@ -760,15 +898,15 @@ export function createGameSnapshot(): GameSnapshot {
       [__, __, __, __, __, __, __, __],
       [__, __, __, __, __, __, __, __],
       [__, __, __, __, __, __, __, __],
-      [__, __, __, __, __, __, __, __]
+      [__, __, __, __, __, __, __, __],
     ],
     currentPlayer: WHITE,
     hasWhiteLostCastling: false,
     hasBlackLostCastling: false,
     lastMove: {
       origin: { col: -1, row: -1 },
-      destination: { col: -1, row: -1 }
-    }
+      destination: { col: -1, row: -1 },
+    },
   };
 }
 

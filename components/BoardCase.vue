@@ -5,28 +5,29 @@
     :data-col="position.col"
     class="relative aspect-square"
     :class="{
-      'border-4': selected
+      'border-4': selected,
     }"
-    :style="{backgroundColor}"
+    :style="{ backgroundColor }"
   >
     <div
       v-if="playable"
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square  opacity-20 rounded-full"
-      :class="occupied ? 'h-full border-8 border-neutral-900':'h-1/3 bg-neutral-900'"
-    >
-    </div>
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square opacity-20 rounded-full"
+      :class="
+        occupied ? 'h-full border-8 border-neutral-900' : 'h-1/3 bg-neutral-900'
+      "
+    ></div>
   </div>
 </template>
 <script setup lang="ts">
 import { BLACK, type Color, type Position, WHITE } from "@/core/rules";
 import { computed } from "vue";
 
-export type CaseState = "initial" | "active"
+export type CaseState = "initial" | "active";
 
 const props = withDefaults(
   defineProps<{
-    position: Position,
-    color: Color
+    position: Position;
+    color: Color;
     active?: boolean;
     selected?: boolean;
     playable?: boolean;
@@ -36,8 +37,8 @@ const props = withDefaults(
     active: false,
     selected: false,
     playable: false,
-    occupied: false
-  }
+    occupied: false,
+  },
 );
 
 const backgroundColor = computed(() => {

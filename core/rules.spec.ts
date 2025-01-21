@@ -16,34 +16,18 @@ import {
   type Position,
   positionOfPiece,
   promoteTo,
-  ROWS
-} from "./rules.ts";
+  ROWS,
+} from "./rules";
 
 type PlayableMoves = (0 | 1)[][];
 
-const {
-  WHITE,
-  BLACK
-} = Colors;
-const {
-  __,
-  WK,
-  WQ,
-  WB,
-  WR,
-  WN,
-  WP,
-  BK,
-  BQ,
-  BB,
-  BR,
-  BP
-} = Pieces;
+const { WHITE, BLACK } = Colors;
+const { __, WK, WQ, WB, WR, WN, WP, BK, BQ, BB, BR, BP } = Pieces;
 
 function assertPlayableMovesMatch(
   gameSnapshot: GameSnapshot,
   pieceToMove: Position,
-  playableMoves: PlayableMoves
+  playableMoves: PlayableMoves,
 ) {
   expect(pieceToMove.col).toBeGreaterThan(-1);
   expect(pieceToMove.row).toBeGreaterThan(-1);
@@ -52,7 +36,12 @@ function assertPlayableMovesMatch(
     for (let row = 0; row < ROWS; row++) {
       const expectedCanMove = playableMoves[col][row];
       const destination: Position = { col, row };
-      expect.soft(canPlay(gameSnapshot, pieceToMove, destination), `Expect ${pieceToMove.col}${pieceToMove.row} -> ${destination.col}${destination.row} to be ${!!expectedCanMove}`).toBe(!!expectedCanMove);
+      expect
+        .soft(
+          canPlay(gameSnapshot, pieceToMove, destination),
+          `Expect ${pieceToMove.col}${pieceToMove.row} -> ${destination.col}${destination.row} to be ${!!expectedCanMove}`,
+        )
+        .toBe(!!expectedCanMove);
     }
   }
 }
@@ -68,15 +57,15 @@ describe("all", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, BP);
 
@@ -88,7 +77,7 @@ describe("all", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -104,15 +93,15 @@ describe("all", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = { col: 3, row: 2 };
 
@@ -124,7 +113,7 @@ describe("all", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -140,15 +129,15 @@ describe("all", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -160,7 +149,7 @@ describe("all", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
 
@@ -179,15 +168,15 @@ describe("all", () => {
         [__, WK, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -199,15 +188,13 @@ describe("all", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
   });
 });
 
-
 describe("pawn", () => {
-
   it("white_can_move_1_cell_front_when_not_at_start_row", () => {
     const gameSnapshot: GameSnapshot = {
       board: [
@@ -218,15 +205,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -238,7 +225,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -254,15 +241,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -274,7 +261,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -290,15 +277,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -310,7 +297,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -326,15 +313,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -346,7 +333,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -362,16 +349,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: 0, row: 6 },
-        destination: { col: 0, row: 4 }
-      }
-
+        destination: { col: 0, row: 4 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -383,7 +369,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -399,15 +385,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, BP);
 
@@ -419,7 +405,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -435,15 +421,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, BP);
 
@@ -455,7 +441,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -471,15 +457,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, BP);
 
@@ -491,7 +477,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -507,15 +493,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, BP);
 
@@ -527,7 +513,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -543,15 +529,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: 0, row: 1 },
-        destination: { col: 0, row: 3 }
-      }
+        destination: { col: 0, row: 3 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, BP);
 
@@ -563,7 +549,7 @@ describe("pawn", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -579,15 +565,15 @@ describe("pawn", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
     const destination: Position = positionOfPiece(gameSnapshot.board, BP);
@@ -609,15 +595,15 @@ describe("knight", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WN);
 
@@ -629,7 +615,7 @@ describe("knight", () => {
       [0, 1, 0, 0, 0, 1, 0, 0],
       [0, 0, 1, 0, 1, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -647,15 +633,15 @@ describe("king", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
 
@@ -667,7 +653,7 @@ describe("king", () => {
       [0, 0, 1, 1, 1, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -683,15 +669,15 @@ describe("king", () => {
         [__, __, __, __, __, BQ, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
 
@@ -703,7 +689,7 @@ describe("king", () => {
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -719,15 +705,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [WR, __, __, __, __, __, __, __]
+        [WR, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 6, row: 0 };
@@ -745,15 +731,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [WN, __, __, __, __, __, __, __],
-        [WR, __, __, __, __, __, __, __]
+        [WR, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const gameSnapshot2: GameSnapshot = {
       board: [
@@ -764,15 +750,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [WB, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [WR, __, __, __, __, __, __, __]
+        [WR, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot1.board, WK);
     const destination: Position = { col: 6, row: 0 };
@@ -791,15 +777,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [WR, __, __, __, __, __, __, __]
+        [WR, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: true,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 6, row: 0 };
@@ -817,15 +803,15 @@ describe("king", () => {
         [WK, __, BR, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [WR, __, __, __, __, __, __, __]
+        [WR, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 6, row: 0 };
@@ -843,15 +829,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, BR, __, __, __, __, __],
-        [WR, __, __, __, __, __, __, __]
+        [WR, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 6, row: 0 };
@@ -869,15 +855,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, BR, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [WR, __, __, __, __, __, __, __]
+        [WR, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 6, row: 0 };
@@ -895,15 +881,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 2, row: 0 };
@@ -921,15 +907,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const gameSnapshot2: GameSnapshot = {
       board: [
@@ -940,15 +926,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const gameSnapshot3: GameSnapshot = {
       board: [
@@ -959,15 +945,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot1.board, WK);
     const destination: Position = { col: 2, row: 0 };
@@ -987,15 +973,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: true,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 2, row: 0 };
@@ -1013,15 +999,15 @@ describe("king", () => {
         [WK, __, BR, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 2, row: 0 };
@@ -1039,15 +1025,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 2, row: 0 };
@@ -1065,15 +1051,15 @@ describe("king", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 2, row: 0 };
@@ -1082,7 +1068,7 @@ describe("king", () => {
   });
 
   // TODO check cannot rock if rook can be eat
-// TODO check cannot rock king in check
+  // TODO check cannot rock king in check
 });
 
 describe("rook", () => {
@@ -1096,15 +1082,15 @@ describe("rook", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WR);
 
@@ -1116,7 +1102,7 @@ describe("rook", () => {
       [0, 0, 0, 1, 0, 0, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0],
-      [0, 0, 0, 1, 0, 0, 0, 0]
+      [0, 0, 0, 1, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -1132,15 +1118,15 @@ describe("rook", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, BP, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WR);
 
@@ -1152,7 +1138,7 @@ describe("rook", () => {
       [0, 0, 0, 1, 0, 0, 0, 0],
       [0, 0, 0, 1, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -1170,15 +1156,15 @@ describe("rook", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WB);
 
@@ -1190,7 +1176,7 @@ describe("rook", () => {
       [0, 0, 1, 0, 1, 0, 0, 0],
       [0, 1, 0, 0, 0, 1, 0, 0],
       [1, 0, 0, 0, 0, 0, 1, 0],
-      [0, 0, 0, 0, 0, 0, 0, 1]
+      [0, 0, 0, 0, 0, 0, 0, 1],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -1206,15 +1192,15 @@ describe("rook", () => {
         [__, __, __, __, __, __, __, __],
         [__, BP, __, __, __, BP, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WB);
 
@@ -1226,7 +1212,7 @@ describe("rook", () => {
       [0, 0, 1, 0, 1, 0, 0, 0],
       [0, 1, 0, 0, 0, 1, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -1244,15 +1230,15 @@ describe("queen", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WQ);
 
@@ -1264,7 +1250,7 @@ describe("queen", () => {
       [0, 0, 1, 1, 1, 0, 0, 0],
       [0, 1, 0, 1, 0, 1, 0, 0],
       [1, 0, 0, 1, 0, 0, 1, 0],
-      [0, 0, 0, 1, 0, 0, 0, 1]
+      [0, 0, 0, 1, 0, 0, 0, 1],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -1280,15 +1266,15 @@ describe("queen", () => {
         [__, __, __, __, __, __, __, __],
         [__, BP, __, BP, __, BP, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WQ);
 
@@ -1300,7 +1286,7 @@ describe("queen", () => {
       [0, 0, 1, 1, 1, 0, 0, 0],
       [0, 1, 0, 1, 0, 1, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
     assertPlayableMovesMatch(gameSnapshot, pieceToMove, playableMoves);
@@ -1318,15 +1304,15 @@ describe("isPlayerInCheck", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, BQ, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
 
     expect(isPlayerInCheck(gameSnapshot, WHITE)).toBe(true);
@@ -1342,15 +1328,15 @@ describe("isPlayerInCheck", () => {
         [__, __, __, __, WP, __, __, __],
         [__, __, __, __, __, BQ, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
 
     expect(isPlayerInCheck(gameSnapshot, WHITE)).toBe(false);
@@ -1368,22 +1354,24 @@ describe("play", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = positionOfPiece(gameSnapshot.board, BP);
 
     const resultSnapshot = play(gameSnapshot, origin, destination);
     expect(areSamePositions(resultSnapshot.lastMove.origin, origin)).toBe(true);
-    expect(areSamePositions(resultSnapshot.lastMove.destination, destination)).toBe(true);
+    expect(
+      areSamePositions(resultSnapshot.lastMove.destination, destination),
+    ).toBe(true);
   });
 
   it("mark_castling_at_lost_if_king_moved", () => {
@@ -1396,15 +1384,15 @@ describe("play", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = positionOfPiece(gameSnapshot.board, BR);
@@ -1423,15 +1411,15 @@ describe("play", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WR);
     const destination: Position = positionOfPiece(gameSnapshot.board, BR);
@@ -1450,15 +1438,15 @@ describe("play", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WP);
     const destination: Position = positionOfPiece(gameSnapshot.board, BP);
@@ -1477,15 +1465,15 @@ describe("play", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 2, row: 0 };
@@ -1506,15 +1494,15 @@ describe("play", () => {
         [WK, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [WR, __, __, __, __, __, __, __]
+        [WR, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WK);
     const destination: Position = { col: 6, row: 0 };
@@ -1535,15 +1523,15 @@ describe("play", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: 0, row: 6 },
-        destination: { col: 0, row: 4 }
-      }
+        destination: { col: 0, row: 4 },
+      },
     };
     const pieceToMove: Position = positionOfPiece(gameSnapshot.board, WP);
     const destination: Position = { col: 0, row: 5 };
@@ -1566,15 +1554,15 @@ describe("canPromote", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -1591,15 +1579,15 @@ describe("canPromote", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, BP);
 
@@ -1618,15 +1606,15 @@ describe("canPromoteTo", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -1645,15 +1633,15 @@ describe("promote", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -1672,15 +1660,15 @@ describe("promote", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: WHITE,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
     const origin: Position = positionOfPiece(gameSnapshot.board, WP);
 
@@ -1701,15 +1689,15 @@ describe("isCurrentPlayerCheckmated", () => {
         [__, __, __, __, __, __, __, BB],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, WR]
+        [__, __, __, __, __, __, __, WR],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
 
     expect(isCurrentPlayerCheckmated(gameSnapshot)).toBe(true);
@@ -1725,15 +1713,15 @@ describe("isCurrentPlayerCheckmated", () => {
         [__, __, __, __, __, WK, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, WR]
+        [__, __, __, __, __, __, __, WR],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
 
     expect(isCurrentPlayerCheckmated(gameSnapshot)).toBe(false);
@@ -1749,15 +1737,15 @@ describe("isCurrentPlayerCheckmated", () => {
         [__, __, __, __, __, __, __, WR],
         [__, __, __, __, __, WQ, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
 
     expect(isCurrentPlayerCheckmated(gameSnapshot)).toBe(false);
@@ -1775,15 +1763,15 @@ describe("isCurrentPlayerStalemated", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
 
     expect(isCurrentPlayerStalemated(gameSnapshot)).toBe(true);
@@ -1799,15 +1787,15 @@ describe("isCurrentPlayerStalemated", () => {
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
         [__, __, __, __, __, __, __, __],
-        [__, __, __, __, __, __, __, __]
+        [__, __, __, __, __, __, __, __],
       ],
       currentPlayer: BLACK,
       hasWhiteLostCastling: false,
       hasBlackLostCastling: false,
       lastMove: {
         origin: { col: -1, row: -1 },
-        destination: { col: -1, row: -1 }
-      }
+        destination: { col: -1, row: -1 },
+      },
     };
 
     expect(isCurrentPlayerStalemated(gameSnapshot)).toBe(false);

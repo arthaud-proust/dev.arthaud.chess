@@ -39,18 +39,23 @@
 </template>
 
 <script setup lang="ts">
-import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from "@headlessui/vue";
+import {
+  Dialog,
+  DialogPanel,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
 
 const props = withDefaults(
   defineProps<{
     closeable?: boolean;
   }>(),
   {
-    closeable: true
-  }
+    closeable: true,
+  },
 );
 const isOpen = defineModel<boolean>({
-  required: true
+  required: true,
 });
 
 function closeModal() {

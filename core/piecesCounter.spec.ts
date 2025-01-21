@@ -1,7 +1,10 @@
 import { describe, expect, test } from "vitest";
-import { __, BB, BQ, BR, initialGameSnapshot, WB, WQ, WR } from "@/core/rules.ts";
-import { countPoints, eatenBlackPieces, eatenWhitePieces } from "@/core/piecesCounter.ts";
-
+import { __, BB, BQ, BR, initialGameSnapshot, WB, WQ, WR } from "@/core/rules";
+import {
+  countPoints,
+  eatenBlackPieces,
+  eatenWhitePieces,
+} from "@/core/piecesCounter";
 
 describe("eatenWhitePieces", () => {
   test("given board with all pieces, return empty array", () => {

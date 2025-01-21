@@ -8,9 +8,13 @@ import {
   type Piece,
   play,
   type Position,
-  promoteTo
-} from "./rules.ts";
-import { countPoints, eatenBlackPieces, eatenWhitePieces } from "@/core/piecesCounter.ts";
+  promoteTo,
+} from "./rules";
+import {
+  countPoints,
+  eatenBlackPieces,
+  eatenWhitePieces,
+} from "@/core/piecesCounter";
 
 export class Game {
   private history: Array<GameSnapshot>;
@@ -64,12 +68,14 @@ export class Game {
   }
 
   get whitePoints() {
-    const points = countPoints(this.eatenWhitePieces) - countPoints(this.eatenBlackPieces);
+    const points =
+      countPoints(this.eatenWhitePieces) - countPoints(this.eatenBlackPieces);
     if (points > 0) return points;
   }
 
   get blackPoints() {
-    const points = countPoints(this.eatenBlackPieces) - countPoints(this.eatenWhitePieces);
+    const points =
+      countPoints(this.eatenBlackPieces) - countPoints(this.eatenWhitePieces);
     if (points > 0) return points;
   }
 

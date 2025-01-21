@@ -6,7 +6,9 @@ export function rotateMatrix90Clockwise<T>(matrix: T[][]): T[][] {
   const rows = matrix.length;
   const cols = matrix[0].length;
 
-  const rotatedMatrix: T[][] = Array.from({ length: cols }, () => Array<T>(rows));
+  const rotatedMatrix: T[][] = Array.from({ length: cols }, () =>
+    Array<T>(rows),
+  );
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
@@ -25,7 +27,9 @@ export function rotateMatrix90CounterClockwise<T>(matrix: T[][]): T[][] {
   const rows = matrix.length;
   const cols = matrix[0].length;
 
-  const rotatedMatrix: T[][] = Array.from({ length: cols }, () => Array<T>(rows));
+  const rotatedMatrix: T[][] = Array.from({ length: cols }, () =>
+    Array<T>(rows),
+  );
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
@@ -43,9 +47,9 @@ export function flipMatrixVertically<T>(matrix: T[][]): T[][] {
 
   const rows = matrix.length;
 
-  return Array.from({ length: rows }, (_, i) =>
-    [...matrix[rows - i - 1]]
-  ) as T[][];
+  return Array.from({ length: rows }, (_, i) => [
+    ...matrix[rows - i - 1],
+  ]) as T[][];
 }
 
 export function flipMatrixHorizontally<T>(matrix: T[][]): T[][] {
@@ -53,5 +57,5 @@ export function flipMatrixHorizontally<T>(matrix: T[][]): T[][] {
     return matrix;
   }
 
-  return matrix.map(row => [...row].reverse()) as T[][];
+  return matrix.map((row) => [...row].reverse()) as T[][];
 }

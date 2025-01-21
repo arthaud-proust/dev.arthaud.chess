@@ -1,4 +1,10 @@
-import { type GameSnapshot, type Move, pieceAt, pieceColor, type Position } from "./rules.ts";
+import {
+  type GameSnapshot,
+  type Move,
+  pieceAt,
+  pieceColor,
+  type Position,
+} from "./rules";
 
 type OnPlayFn = (move: Move) => void;
 
@@ -32,7 +38,7 @@ export class MoveHandler {
 
       this.onPlayFn({
         origin: this._origin,
-        destination: this._destination
+        destination: this._destination,
       });
 
       return;

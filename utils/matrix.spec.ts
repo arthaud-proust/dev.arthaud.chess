@@ -1,12 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { flipMatrixHorizontally, flipMatrixVertically, rotateMatrix90Clockwise, rotateMatrix90CounterClockwise } from "@/utils/matrix.ts";
+import {
+  flipMatrixHorizontally,
+  flipMatrixVertically,
+  rotateMatrix90Clockwise,
+  rotateMatrix90CounterClockwise,
+} from "@/utils/matrix";
 
 describe("rotateMatrix90Clockwise", () => {
   it("rotate", () => {
     const matrix = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     const result = rotateMatrix90Clockwise(matrix);
@@ -14,7 +19,7 @@ describe("rotateMatrix90Clockwise", () => {
     expect(result).toStrictEqual([
       [7, 4, 1],
       [8, 5, 2],
-      [9, 6, 3]
+      [9, 6, 3],
     ]);
   });
 
@@ -22,7 +27,7 @@ describe("rotateMatrix90Clockwise", () => {
     const matrix = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     const result = rotateMatrix90Clockwise(matrix);
@@ -32,7 +37,7 @@ describe("rotateMatrix90Clockwise", () => {
     expect(matrix).toStrictEqual([
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ]);
   });
 });
@@ -42,7 +47,7 @@ describe("rotateMatrix90CounterClockwise", () => {
     const matrix = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     const result = rotateMatrix90CounterClockwise(matrix);
@@ -50,7 +55,7 @@ describe("rotateMatrix90CounterClockwise", () => {
     expect(result).toStrictEqual([
       [3, 6, 9],
       [2, 5, 8],
-      [1, 4, 7]
+      [1, 4, 7],
     ]);
   });
 
@@ -58,7 +63,7 @@ describe("rotateMatrix90CounterClockwise", () => {
     const matrix = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     const result = rotateMatrix90CounterClockwise(matrix);
@@ -68,7 +73,7 @@ describe("rotateMatrix90CounterClockwise", () => {
     expect(matrix).toStrictEqual([
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ]);
   });
 });
@@ -78,7 +83,7 @@ describe("flipMatrixVertically", () => {
     const matrix = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     const result = flipMatrixVertically(matrix);
@@ -86,7 +91,7 @@ describe("flipMatrixVertically", () => {
     expect(result).toStrictEqual([
       [7, 8, 9],
       [4, 5, 6],
-      [1, 2, 3]
+      [1, 2, 3],
     ]);
   });
 
@@ -94,7 +99,7 @@ describe("flipMatrixVertically", () => {
     const matrix = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     const result = flipMatrixVertically(matrix);
@@ -104,7 +109,7 @@ describe("flipMatrixVertically", () => {
     expect(matrix).toStrictEqual([
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ]);
   });
 });
@@ -114,7 +119,7 @@ describe("flipMatrixHorizontally", () => {
     const matrix = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     const result = flipMatrixHorizontally(matrix);
@@ -122,7 +127,7 @@ describe("flipMatrixHorizontally", () => {
     expect(result).toStrictEqual([
       [3, 2, 1],
       [6, 5, 4],
-      [9, 8, 7]
+      [9, 8, 7],
     ]);
   });
 
@@ -130,7 +135,7 @@ describe("flipMatrixHorizontally", () => {
     const matrix = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     const result = flipMatrixHorizontally(matrix);
@@ -140,7 +145,7 @@ describe("flipMatrixHorizontally", () => {
     expect(matrix).toStrictEqual([
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ]);
   });
 });

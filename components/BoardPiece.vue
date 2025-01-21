@@ -1,15 +1,33 @@
 <template>
-  <div
-    class="aspect-square flex items-center justify-center"
-  >
-    <img class="h-5/6 aspect-square pointer-events-none" v-if="pieceDatas[piece]" :src="pieceDatas[piece]?.src" :alt="pieceDatas[piece]?.alt">
+  <div class="aspect-square flex items-center justify-center">
+    <img
+      class="h-5/6 aspect-square pointer-events-none"
+      v-if="pieceDatas[piece]"
+      :src="pieceDatas[piece]?.src"
+      :alt="pieceDatas[piece]?.alt"
+    />
   </div>
 </template>
 <script setup lang="ts">
-import { __, BB, BK, BN, BP, BQ, BR, type Piece, WB, WK, WN, WP, WQ, WR } from "@/core/rules";
+import {
+  __,
+  BB,
+  BK,
+  BN,
+  BP,
+  BQ,
+  BR,
+  type Piece,
+  WB,
+  WK,
+  WN,
+  WP,
+  WQ,
+  WR,
+} from "@/core/rules";
 
 defineProps<{
-  piece: Piece
+  piece: Piece;
 }>();
 
 const pieceDatas = {
@@ -25,6 +43,6 @@ const pieceDatas = {
   [BB]: { src: "/pieces/BB.png", alt: "Black Bishop" },
   [BR]: { src: "/pieces/BR.png", alt: "Black Rook" },
   [BN]: { src: "/pieces/BN.png", alt: "Black Knight" },
-  [BP]: { src: "/pieces/BP.png", alt: "Black Pawn" }
+  [BP]: { src: "/pieces/BP.png", alt: "Black Pawn" },
 };
 </script>
