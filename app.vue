@@ -1,5 +1,6 @@
 <template>
-  <Game
+  <GamePlayer
+    class="h-dvh"
     :initial-game-snapshot="game.snapshot.value"
     v-model:horizontal="horizontal"
     v-model:rotate="rotate"
@@ -11,6 +12,7 @@
 import { useStorage } from "@vueuse/core";
 import { localStorageKey } from "@/utils/localStorage";
 import { useSavedSnapshot } from "@/composables/useSavedSnapshot";
+import GamePlayer from "@/components/GamePlayer.vue";
 
 const game = useSavedSnapshot();
 

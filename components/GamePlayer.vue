@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full h-dvh flex items-center justify-center">
-    <div
-      class="w-full max-w-3xl p-2 md:p-4 lg:p-8 h-full flex flex-col items-center gap-4 justify-end"
-    >
+  <div
+    class="w-full overflow-hidden p-2 md:p-4 lg:p-8 flex flex-col items-center gap-4 justify-end"
+  >
+    <div class="relative flex-1 max-md:w-full md:w-fit flex flex-col items-center gap-2">
       <Board
-        class="flex-shrink-0 aspect-square w-full"
+        class="max-md:w-full md:h-full aspect-square w-auto"
         :snapshot="game.snapshot"
         :activePosition="moveHandler.origin"
         :horizontal="horizontal"
@@ -12,21 +12,28 @@
         @case:click="handleClick"
       />
 
-      <div class="w-full flex gap-8 justify-between h-6">
+      <div class="w-full flex gap-8 justify-between h-6 md:px-4">
         <div class="flex items-center">
-          <span
-            v-if="game.blackPoints"
-            class="mr-2 text-sm text-neutral-500 font-medium"
-          >+{{ game.blackPoints }}</span
-          >
           <BoardPiece
             v-for="piece in game.eatenBlackPieces"
             :piece="piece"
             class="h-full -mr-2"
           />
+          <span
+            v-if="game.blackPoints"
+            class="ml-2 text-sm text-neutral-500 font-medium"
+          >+{{ game.blackPoints }}</span
+          >
         </div>
 
         <div class="flex items-center">
+          <span
+            v-if="game.whitePoints"
+            class="mr-2 text-sm text-neutral-500 font-medium"
+          >
+            +{{ game.whitePoints }}
+          </span>
+
           <div class="flex items-center -gap-4 h-full">
             <BoardPiece
               v-for="piece in game.eatenWhitePieces"
@@ -34,62 +41,58 @@
               class="h-full -ml-2"
             />
           </div>
-          <span
-            v-if="game.whitePoints"
-            class="ml-2 text-sm text-neutral-500 font-medium"
-          >+{{ game.whitePoints }}</span
-          >
+
         </div>
       </div>
+    </div>
 
-      <div
-        class="flex max-md:text-sm flex-wrap gap-x-8 gap-y-4 items-center select-none"
-      >
-        <div class="flex items-center gap-1">
-          <template v-if="game.snapshot.currentPlayer === WHITE">
-            <BoardPiece :piece="WK" class="w-8" />
-            <span>White to play</span>
-          </template>
-          <template v-else>
-            <BoardPiece :piece="BK" class="w-8" />
-            <span>Black to play</span>
-          </template>
-        </div>
+    <div
+      class="flex max-md:text-sm flex-wrap gap-x-8 gap-y-4 items-center select-none"
+    >
+      <div class="flex items-center gap-1">
+        <template v-if="game.snapshot.currentPlayer === WHITE">
+          <BoardPiece :piece="WK" class="w-8" />
+          <span>White to play</span>
+        </template>
+        <template v-else>
+          <BoardPiece :piece="BK" class="w-8" />
+          <span>Black to play</span>
+        </template>
+      </div>
 
-        <div class="flex flex-wrap gap-2 items-center">
-          <label
-            v-tooltip="'Display board horizontally'"
-            class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2"
-          >
-            <input type="checkbox" v-model="horizontal" />
-            <span>Horizontal</span>
-          </label>
-          <label
-            v-if="!horizontal"
-            v-tooltip="'Rotate board for the current player'"
-            class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2"
-          >
-            <input type="checkbox" v-model="rotate" />
-            <span>Rotate</span>
-          </label>
+      <div class="flex flex-wrap gap-2 items-center">
+        <label
+          v-tooltip="'Display board horizontally'"
+          class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2"
+        >
+          <input type="checkbox" v-model="horizontal" />
+          <span>Horizontal</span>
+        </label>
+        <label
+          v-if="!horizontal"
+          v-tooltip="'Rotate board for the current player'"
+          class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2"
+        >
+          <input type="checkbox" v-model="rotate" />
+          <span>Rotate</span>
+        </label>
 
-          <button
-            @click="game.undo()"
-            v-if="game.canUndo"
-            v-tooltip="'Undo last move'"
-            class="bg-neutral-100 rounded-md px-4 py-2"
-          >
-            Undo
-          </button>
+        <button
+          @click="game.undo()"
+          v-if="game.canUndo"
+          v-tooltip="'Undo last move'"
+          class="bg-neutral-100 rounded-md px-4 py-2"
+        >
+          Undo
+        </button>
 
-          <button
-            @click="emit('game:reset')"
-            v-tooltip="'Reset board for a new game'"
-            class="bg-red-100 text-red-800 rounded-md px-4 py-2"
-          >
-            New game
-          </button>
-        </div>
+        <button
+          @click="emit('game:reset')"
+          v-tooltip="'Reset board for a new game'"
+          class="bg-red-100 text-red-800 rounded-md px-4 py-2"
+        >
+          New game
+        </button>
       </div>
     </div>
 
