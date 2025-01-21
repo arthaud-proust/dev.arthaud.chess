@@ -8,7 +8,7 @@
           :position="{col, row}"
           :class="`case-${col}-${row}`"
           :color="caseColor({col, row})"
-          :selected="!!movedPiecePosition && !!hoveredPosition && areSamePositions(hoveredPosition, {col,row})"
+          :selected="!!activePiece && !!hoveredPosition && areSamePositions(hoveredPosition, {col,row})"
           :active="(!!activePosition && areSamePositions(activePosition, {col, row})) || areSamePositions(snapshot.lastMove.origin, {col, row}) || areSamePositions(snapshot.lastMove.destination, {col, row})"
           :playable="!!activePosition && canPlay(snapshot, activePosition, { col, row })"
           :occupied="pieceAt(snapshot.board, {col, row}) !== __"
@@ -30,15 +30,16 @@
         >
           <BoardPiece
             class="pointer-events-auto"
-            @mousedown="movePiece({col, row})"
-            @touchstart="movePiece({col, row})"
+            @mousedown="markAsActivePiece({col, row})"
+            @touchstart="markAsActivePiece({col, row})"
             v-if="snapshot.board[col]?.[row]"
             :piece="snapshot.board[col][row]"
-            :style="movedPiecePosition && areSamePositions(movedPiecePosition, {col, row})
+            :style="
+              isMovingPiece && activePiece && areSamePositions(activePiece, {col, row})
                && {top: `${elementY}px`,left:`${elementX}px`, width:`12.5%`, transform: 'translate(-50%, -50%)'}
             "
             :class="[
-              movedPiecePosition && areSamePositions(movedPiecePosition, {col, row}) && 'absolute'
+                isMovingPiece && activePiece && areSamePositions(activePiece, {col, row}) && 'absolute'
             ]"
           />
         </div>
@@ -106,10 +107,12 @@ const orientedPositions = computed(() => {
 const container = ref<HTMLDivElement>();
 const { x, y, elementX, elementY } = useMouseInElement(container);
 
-const movedPiecePosition = ref<Position | null>(null);
-const movePiece = (position: Position) => {
+const activePiece = ref<Position | null>(null);
+const isMovingPiece = ref(false);
+const markAsActivePiece = (position: Position) => {
   emit("case:click", position);
-  movedPiecePosition.value = position;
+  activePiece.value = position;
+  isMovingPiece.value = true;
 };
 
 const hoveredPosition = computed(() => {
@@ -123,21 +126,22 @@ const hoveredPosition = computed(() => {
     return el instanceof HTMLDivElement && el.dataset.type === "board-case";
   }) as HTMLDivElement | undefined;
 
-  if (!boardCase || !boardCase.dataset.col || !boardCase.dataset.row) return;
-
-  return {
+  if (boardCase?.dataset.col && boardCase?.dataset.row) return {
     col: Number.parseInt(boardCase.dataset.col),
     row: Number.parseInt(boardCase.dataset.row)
   };
 });
 
 const placePiece = () => {
+  isMovingPiece.value = false;
+
   const position = hoveredPosition.value;
 
   if (!position) return;
+  if (activePiece.value && areSamePositions(activePiece.value, position)) return;
 
   emit("case:click", position);
-  movedPiecePosition.value = null;
+  activePiece.value = null;
 };
 
 const isEven = (x: number) => (x % 2) == 0;
