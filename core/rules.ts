@@ -4,7 +4,7 @@ export const BLACK = 2;
 export const Colors = Object.freeze({
   NONE,
   WHITE,
-  BLACK,
+  BLACK
 });
 export type Color = (typeof Colors)[keyof typeof Colors];
 
@@ -34,7 +34,7 @@ export const Pieces = Object.freeze({
   BB,
   BR,
   BN,
-  BP,
+  BP
 });
 export type Piece = (typeof Pieces)[keyof typeof Pieces];
 
@@ -54,7 +54,7 @@ export const Directions = Object.freeze({
   BOTTOM_RIGHT: 5,
   BOTTOM: 6,
   BOTTOM_LEFT: 7,
-  LEFT: 8,
+  LEFT: 8
 });
 export type Direction = (typeof Directions)[keyof typeof Directions];
 
@@ -112,29 +112,35 @@ export const WHITE_CASTLING_KING_SIDE: CastlingPositions = {
   kingOrigin: { col: 4, row: 0 },
   kingDestination: { col: 6, row: 0 },
   rookOrigin: { col: 7, row: 0 },
-  rookDestination: { col: 5, row: 0 },
+  rookDestination: { col: 5, row: 0 }
 };
 
 export const WHITE_CASTLING_QUEEN_SIDE: CastlingPositions = {
   kingOrigin: { col: 4, row: 0 },
   kingDestination: { col: 2, row: 0 },
   rookOrigin: { col: 0, row: 0 },
-  rookDestination: { col: 3, row: 0 },
+  rookDestination: { col: 3, row: 0 }
 };
 
 export const BLACK_CASTLING_KING_SIDE: CastlingPositions = {
   kingOrigin: { col: 4, row: 7 },
   kingDestination: { col: 6, row: 7 },
   rookOrigin: { col: 7, row: 7 },
-  rookDestination: { col: 5, row: 7 },
+  rookDestination: { col: 5, row: 7 }
 };
 
 export const BLACK_CASTLING_QUEEN_SIDE: CastlingPositions = {
   kingOrigin: { col: 4, row: 7 },
   kingDestination: { col: 2, row: 7 },
   rookOrigin: { col: 0, row: 7 },
-  rookDestination: { col: 3, row: 7 },
+  rookDestination: { col: 3, row: 7 }
 };
+
+export class InvalidMoveError extends Error {
+}
+
+export class InvalidPromotionError extends Error {
+}
 
 export function areSamePositions(a: Position, b: Position): boolean {
   return a.col == b.col && a.row == b.row;
@@ -143,25 +149,25 @@ export function areSamePositions(a: Position, b: Position): boolean {
 export function withSameRow(position: Position, col: number): Position {
   return {
     col,
-    row: position.row,
+    row: position.row
   };
 }
 
 export function withSameCol(position: Position, row: number): Position {
   return {
     col: position.col,
-    row,
+    row
   };
 }
 
 function atDirection(
   position: Position,
   direction: Direction,
-  distance: number,
+  distance: number
 ): Position {
   const newPosition: Position = {
     col: position.col,
-    row: position.row,
+    row: position.row
   };
 
   if (direction == TOP_LEFT || direction == TOP || direction == TOP_RIGHT) {
@@ -223,7 +229,7 @@ export function pieceColor(piece: Piece): Color {
 function moveTo(
   board: GameBoard,
   origin: Position,
-  destination: Position,
+  destination: Position
 ): void {
   board[destination.col][destination.row] = board[origin.col][origin.row];
   board[origin.col][origin.row] = __;
@@ -252,11 +258,11 @@ export function copyOfGameSnapshot(gameSnapshot: GameSnapshot): GameSnapshot {
 
   newGameSnapshot.lastMove.origin = {
     row: gameSnapshot.lastMove.origin.row,
-    col: gameSnapshot.lastMove.origin.col,
+    col: gameSnapshot.lastMove.origin.col
   };
   newGameSnapshot.lastMove.destination = {
     row: gameSnapshot.lastMove.destination.row,
-    col: gameSnapshot.lastMove.destination.col,
+    col: gameSnapshot.lastMove.destination.col
   };
 
   return newGameSnapshot;
@@ -265,7 +271,7 @@ export function copyOfGameSnapshot(gameSnapshot: GameSnapshot): GameSnapshot {
 function appliedMove(
   gameSnapshot: GameSnapshot,
   origin: Position,
-  destination: Position,
+  destination: Position
 ): GameSnapshot {
   const nextGameSnapshot: GameSnapshot = copyOfGameSnapshot(gameSnapshot);
 
@@ -287,7 +293,7 @@ function appliedMove(
   ) {
     nextGameSnapshot.board[gameSnapshot.lastMove.destination.col][
       gameSnapshot.lastMove.destination.row
-    ] = __;
+      ] = __;
   }
 
   if (
@@ -303,7 +309,7 @@ function appliedMove(
   ) {
     nextGameSnapshot.board[gameSnapshot.lastMove.destination.col][
       gameSnapshot.lastMove.destination.row
-    ] = __;
+      ] = __;
   }
 
   if (
@@ -314,7 +320,7 @@ function appliedMove(
     moveTo(
       nextGameSnapshot.board,
       WHITE_CASTLING_KING_SIDE.rookOrigin,
-      WHITE_CASTLING_KING_SIDE.rookDestination,
+      WHITE_CASTLING_KING_SIDE.rookDestination
     );
   }
 
@@ -326,7 +332,7 @@ function appliedMove(
     moveTo(
       nextGameSnapshot.board,
       WHITE_CASTLING_QUEEN_SIDE.rookOrigin,
-      WHITE_CASTLING_QUEEN_SIDE.rookDestination,
+      WHITE_CASTLING_QUEEN_SIDE.rookDestination
     );
   }
 
@@ -338,7 +344,7 @@ function appliedMove(
     moveTo(
       nextGameSnapshot.board,
       BLACK_CASTLING_KING_SIDE.rookOrigin,
-      BLACK_CASTLING_KING_SIDE.rookDestination,
+      BLACK_CASTLING_KING_SIDE.rookDestination
     );
   }
 
@@ -350,7 +356,7 @@ function appliedMove(
     moveTo(
       nextGameSnapshot.board,
       BLACK_CASTLING_QUEEN_SIDE.rookOrigin,
-      BLACK_CASTLING_QUEEN_SIDE.rookDestination,
+      BLACK_CASTLING_QUEEN_SIDE.rookDestination
     );
   }
 
@@ -376,7 +382,7 @@ function appliedMove(
 function appliedPromotion(
   gameSnapshot: GameSnapshot,
   origin: Position,
-  promotion: Piece,
+  promotion: Piece
 ): GameSnapshot {
   const nextGameSnapshot: GameSnapshot = copyOfGameSnapshot(gameSnapshot);
 
@@ -405,7 +411,7 @@ export function positionOfPiece(board: GameBoard, piece: Piece): Position {
 export function isEmptyAtColRow(
   board: GameBoard,
   col: number,
-  row: number,
+  row: number
 ): boolean {
   return pieceAtColRow(board, col, row) == __;
 }
@@ -417,7 +423,7 @@ export function isEmptyAt(board: GameBoard, position: Position): boolean {
 function isColumnEmptyBetween(
   board: GameBoard,
   start: Position,
-  end: Position,
+  end: Position
 ): boolean {
   if (start.col != end.col) {
     return false;
@@ -438,7 +444,7 @@ function isColumnEmptyBetween(
 function isRowEmptyBetween(
   board: GameBoard,
   start: Position,
-  end: Position,
+  end: Position
 ): boolean {
   if (start.row != end.row) {
     return false;
@@ -459,7 +465,7 @@ function isRowEmptyBetween(
 function isDiagonalEmptyBetween(
   board: GameBoard,
   start: Position,
-  end: Position,
+  end: Position
 ): boolean {
   const dx: number = end.col - start.col;
   const dy: number = end.row - start.row;
@@ -495,7 +501,7 @@ function isPositionOnBoard(position: Position): boolean {
 function isMoveValid(
   gameSnapshot: GameSnapshot,
   origin: Position,
-  destination: Position,
+  destination: Position
 ): boolean {
   const pieceAtOrigin: Piece = pieceAt(gameSnapshot.board, origin);
   const pieceColorAtOrigin: Color = pieceColor(pieceAtOrigin);
@@ -610,7 +616,7 @@ function isMoveValid(
         isRowEmptyBetween(
           gameSnapshot.board,
           kingSide.kingOrigin,
-          kingSide.rookOrigin,
+          kingSide.rookOrigin
         ) &&
         !isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer) &&
         !isPieceThreatened(nextSnapshot, kingSide.rookDestination)
@@ -628,7 +634,7 @@ function isMoveValid(
         isRowEmptyBetween(
           gameSnapshot.board,
           queenSide.kingOrigin,
-          queenSide.rookOrigin,
+          queenSide.rookOrigin
         ) &&
         !isPlayerInCheck(gameSnapshot, gameSnapshot.currentPlayer) &&
         !isPieceThreatened(nextSnapshot, queenSide.rookDestination)
@@ -665,7 +671,7 @@ function isMoveValid(
 
 function isPieceThreatened(
   gameSnapshot: GameSnapshot,
-  piece: Position,
+  piece: Position
 ): boolean {
   if (!isPositionOnBoard(piece)) {
     return false;
@@ -692,11 +698,11 @@ function isPieceThreatened(
 
 export function isPlayerInCheck(
   gameSnapshot: GameSnapshot,
-  player: Color,
+  player: Color
 ): boolean {
   const kingPosition: Position = positionOfPiece(
     gameSnapshot.board,
-    player == WHITE ? WK : BK,
+    player == WHITE ? WK : BK
   );
 
   return isPieceThreatened(gameSnapshot, kingPosition);
@@ -705,10 +711,10 @@ export function isPlayerInCheck(
 function canPlayWithoutBeingInCheck(
   gameSnapshot: GameSnapshot,
   origin: Position,
-  destination: Position,
+  destination: Position
 ): boolean {
   const pieceColorAtOrigin: Color = pieceColor(
-    pieceAt(gameSnapshot.board, origin),
+    pieceAt(gameSnapshot.board, origin)
   );
 
   if (pieceColorAtOrigin != gameSnapshot.currentPlayer) {
@@ -722,7 +728,7 @@ function canPlayWithoutBeingInCheck(
   const nextSnapshot: GameSnapshot = appliedMove(
     gameSnapshot,
     origin,
-    destination,
+    destination
   );
 
   return !isPlayerInCheck(nextSnapshot, gameSnapshot.currentPlayer);
@@ -773,7 +779,7 @@ export function isCurrentPlayerCheckmated(gameSnapshot: GameSnapshot): boolean {
 export function canPlay(
   gameSnapshot: GameSnapshot,
   origin: Position,
-  destination: Position,
+  destination: Position
 ): boolean {
   return (
     canPlayWithoutBeingInCheck(gameSnapshot, origin, destination) &&
@@ -783,7 +789,7 @@ export function canPlay(
 
 export function canPromote(
   gameSnapshot: GameSnapshot,
-  origin: Position,
+  origin: Position
 ): boolean {
   const piece: Piece = pieceAt(gameSnapshot.board, origin);
   const color: Color = pieceColor(piece);
@@ -819,7 +825,7 @@ function isAPromotionPiece(piece: Piece): boolean {
 export function canPromoteTo(
   gameSnapshot: GameSnapshot,
   origin: Position,
-  promotion: Piece,
+  promotion: Piece
 ): boolean {
   return (
     canPromote(gameSnapshot, origin) &&
@@ -831,10 +837,10 @@ export function canPromoteTo(
 export function play(
   gameSnapshot: GameSnapshot,
   origin: Position,
-  destination: Position,
+  destination: Position
 ): GameSnapshot {
   if (!canPlay(gameSnapshot, origin, destination)) {
-    throw new Error("Can't play this move");
+    throw new InvalidMoveError("Can't play this move");
   }
 
   return appliedMove(gameSnapshot, origin, destination);
@@ -843,10 +849,10 @@ export function play(
 export function promoteTo(
   gameSnapshot: GameSnapshot,
   origin: Position,
-  promotion: Piece,
+  promotion: Piece
 ): GameSnapshot {
   if (!canPromote(gameSnapshot, origin)) {
-    throw new Error("Can't promote to this piece");
+    throw new InvalidPromotionError("Can't promote to this piece");
   }
 
   return appliedPromotion(gameSnapshot, origin, promotion);
@@ -898,15 +904,15 @@ export function createGameSnapshot(): GameSnapshot {
       [__, __, __, __, __, __, __, __],
       [__, __, __, __, __, __, __, __],
       [__, __, __, __, __, __, __, __],
-      [__, __, __, __, __, __, __, __],
+      [__, __, __, __, __, __, __, __]
     ],
     currentPlayer: WHITE,
     hasWhiteLostCastling: false,
     hasBlackLostCastling: false,
     lastMove: {
       origin: { col: -1, row: -1 },
-      destination: { col: -1, row: -1 },
-    },
+      destination: { col: -1, row: -1 }
+    }
   };
 }
 

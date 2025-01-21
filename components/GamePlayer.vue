@@ -6,10 +6,9 @@
       <Board
         class="max-md:w-full md:h-full aspect-square w-auto"
         :snapshot="game.snapshot"
-        :activePosition="moveHandler.origin"
         :horizontal="horizontal"
         :rotate="rotate"
-        @case:click="handleClick"
+        @move="handleMove"
       />
 
       <div class="w-full flex gap-8 justify-between h-6 md:px-4">
@@ -97,7 +96,7 @@
     </div>
 
     <BoardPromotionModal
-      :is-open="isPromotionModalOpened"
+      :is-open="!!promotingPosition"
       :current-player="game.currentPlayer"
       @promote="handlePromotion"
     />
@@ -111,8 +110,18 @@
 <script setup lang="ts">
 import Board from "@/components/Board.vue";
 import { Game } from "@/core/game";
-import { BK, copyOfGameSnapshot, type GameSnapshot, type Piece, type Position, WHITE, WK } from "@/core/rules";
-import { MoveHandler } from "@/core/moveHandler";
+import {
+  BK,
+  copyOfGameSnapshot,
+  type GameSnapshot,
+  InvalidMoveError,
+  InvalidPromotionError,
+  type Move,
+  type Piece,
+  type Position,
+  WHITE,
+  WK
+} from "@/core/rules";
 import { reactive, ref, watch } from "vue";
 import BoardPromotionModal from "@/components/BoardPromotionModal.vue";
 import BoardCheckmateModal from "@/components/BoardCheckmateModal.vue";
@@ -142,50 +151,45 @@ const game = reactive(
 
 watch(() => game.snapshot, (newValue) => emit("game:update", newValue));
 
-const isPromotionModalOpened = ref(false);
+const promotingPosition = ref<Position | null>(null);
 const isCheckmateModalOpened = ref(false);
 const isStalemateModalOpened = ref(false);
 
-const handleClick = (position: Position) => {
-  moveHandler.register(game.snapshot, position);
-};
-
-const handlePromotion = (piece: Piece) => {
-  if (!moveHandler.destination) return;
-
+const handleMove = (move: Move) => {
   try {
-    game.promoteTo(moveHandler.destination, piece);
-    isPromotionModalOpened.value = false;
-    moveHandler.reset();
+    game.play(move);
+
+    if (game.canPromote(move.destination)) {
+      promotingPosition.value = move.destination;
+      return;
+    }
+
+    if (game.isCurrentPlayerCheckmated) {
+      isCheckmateModalOpened.value = true;
+      return;
+    }
+
+    if (game.isCurrentPlayerStalemated) {
+      isStalemateModalOpened.value = true;
+      return;
+    }
   } catch (e) {
-    moveHandler.reset();
+    if (!(e instanceof InvalidMoveError)) {
+      console.error(e);
+    }
   }
 };
 
-const moveHandler = reactive(
-  new MoveHandler((move) => {
-    try {
-      game.play(move);
+const handlePromotion = (piece: Piece) => {
+  if (!promotingPosition.value) return;
 
-      if (game.canPromote(move.destination)) {
-        isPromotionModalOpened.value = true;
-        return;
-      }
-
-      if (game.isCurrentPlayerCheckmated) {
-        isCheckmateModalOpened.value = true;
-        return;
-      }
-
-      if (game.isCurrentPlayerStalemated) {
-        isStalemateModalOpened.value = true;
-        return;
-      }
-
-      moveHandler.reset();
-    } catch (e) {
-      moveHandler.reset();
+  try {
+    game.promoteTo(promotingPosition.value, piece);
+    promotingPosition.value = null;
+  } catch (e) {
+    if (!(e instanceof InvalidPromotionError)) {
+      console.error(e);
     }
-  })
-);
+  }
+};
 </script>
