@@ -2,7 +2,7 @@
   <div
     class="w-full overflow-hidden p-2 md:p-4 lg:p-8 flex flex-col items-center gap-4 justify-end"
   >
-    <div class="relative flex-1 max-md:w-full md:w-fit flex flex-col items-center gap-2">
+    <div class="relative flex-1 max-md:w-full md:w-fit flex flex-col justify-center items-center gap-2">
       <Board
         class="max-md:w-full md:h-full aspect-square w-auto"
         :snapshot="game.snapshot"
