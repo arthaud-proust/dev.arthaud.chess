@@ -82,8 +82,16 @@ export type GameBoard = [
 export type GameSnapshot = {
   board: GameBoard;
   currentPlayer: Color;
-  hasWhiteLostCastling: boolean;
-  hasBlackLostCastling: boolean;
+  movedWhitePieces: {
+    king: boolean,
+    kingRook: boolean,
+    queenRook: boolean,
+  }
+  movedBlackPieces: {
+    king: boolean,
+    kingRook: boolean,
+    queenRook: boolean,
+  }
   lastMove: Move;
 };
 
@@ -253,8 +261,8 @@ export function copyOfGameSnapshot(gameSnapshot: GameSnapshot): GameSnapshot {
   }
 
   newGameSnapshot.currentPlayer = gameSnapshot.currentPlayer;
-  newGameSnapshot.hasWhiteLostCastling = gameSnapshot.hasWhiteLostCastling;
-  newGameSnapshot.hasBlackLostCastling = gameSnapshot.hasBlackLostCastling;
+  newGameSnapshot.movedWhitePieces = { ...gameSnapshot.movedWhitePieces };
+  newGameSnapshot.movedBlackPieces = { ...gameSnapshot.movedBlackPieces };
 
   newGameSnapshot.lastMove.origin = {
     row: gameSnapshot.lastMove.origin.row,
@@ -360,12 +368,19 @@ function appliedMove(
     );
   }
 
-  if (pieceMoved == WK || pieceMoved == WR) {
-    nextGameSnapshot.hasWhiteLostCastling = true;
+  if (pieceMoved == WK) {
+    nextGameSnapshot.movedWhitePieces.king = true;
+  }
+  if (pieceMoved == BK) {
+    nextGameSnapshot.movedBlackPieces.king = true;
   }
 
-  if (pieceMoved == BK || pieceMoved == BR) {
-    nextGameSnapshot.hasBlackLostCastling = true;
+  if (pieceMoved == WR) {
+    if (areSamePositions(origin, WHITE_CASTLING_KING_SIDE.rookOrigin)) {
+      nextGameSnapshot.movedWhitePieces.kingRook = true;
+    } else if (areSamePositions(origin, WHITE_CASTLING_QUEEN_SIDE.rookOrigin)) {
+      nextGameSnapshot.movedWhitePieces.queenRook = true;
+    }
   }
 
   if (!canPromote(nextGameSnapshot, destination)) {
@@ -600,10 +615,9 @@ function isMoveValid(
       gameSnapshot.currentPlayer == WHITE
         ? WHITE_CASTLING_QUEEN_SIDE
         : BLACK_CASTLING_QUEEN_SIDE;
-    const hasLostCastling: boolean =
-      gameSnapshot.currentPlayer == WHITE
-        ? gameSnapshot.hasWhiteLostCastling
-        : gameSnapshot.hasBlackLostCastling;
+    const movedPieces = gameSnapshot.currentPlayer == WHITE
+      ? gameSnapshot.movedWhitePieces
+      : gameSnapshot.movedBlackPieces;
 
     const isCastlingKingSide =
       areSamePositions(origin, kingSide.kingOrigin) &&
@@ -612,7 +626,8 @@ function isMoveValid(
       const nextSnapshot = appliedMove(gameSnapshot, origin, destination);
 
       return (
-        !hasLostCastling &&
+        !movedPieces.king &&
+        !movedPieces.kingRook &&
         isRowEmptyBetween(
           gameSnapshot.board,
           kingSide.kingOrigin,
@@ -630,7 +645,8 @@ function isMoveValid(
       const nextSnapshot = appliedMove(gameSnapshot, origin, destination);
 
       return (
-        !hasLostCastling &&
+        !movedPieces.king &&
+        !movedPieces.queenRook &&
         isRowEmptyBetween(
           gameSnapshot.board,
           queenSide.kingOrigin,
@@ -907,8 +923,16 @@ export function createGameSnapshot(): GameSnapshot {
       [__, __, __, __, __, __, __, __]
     ],
     currentPlayer: WHITE,
-    hasWhiteLostCastling: false,
-    hasBlackLostCastling: false,
+    movedWhitePieces: {
+      king: false,
+      kingRook: false,
+      queenRook: false
+    },
+    movedBlackPieces: {
+      king: false,
+      kingRook: false,
+      queenRook: false
+    },
     lastMove: {
       origin: { col: -1, row: -1 },
       destination: { col: -1, row: -1 }
