@@ -86,7 +86,7 @@
         </button>
 
         <button
-          @click="emit('game:reset')"
+          @click="game.reset()"
           v-tooltip="'Reset board for a new game'"
           class="bg-red-100 text-red-800 rounded-md px-4 py-2"
         >
@@ -110,18 +110,7 @@
 <script setup lang="ts">
 import Board from "@/components/Board.vue";
 import { Game } from "@/core/game";
-import {
-  BK,
-  copyOfGameSnapshot,
-  type GameSnapshot,
-  InvalidMoveError,
-  InvalidPromotionError,
-  type Move,
-  type Piece,
-  type Position,
-  WHITE,
-  WK
-} from "@/core/rules";
+import { BK, type GameSnapshot, InvalidMoveError, InvalidPromotionError, type Move, type Piece, type Position, WHITE, WK } from "@/core/rules";
 import { reactive, ref, watch } from "vue";
 import BoardPromotionModal from "@/components/BoardPromotionModal.vue";
 import BoardCheckmateModal from "@/components/BoardCheckmateModal.vue";
@@ -129,7 +118,7 @@ import BoardStalemateModal from "@/components/BoardStalemateModal.vue";
 import BoardPiece from "@/components/BoardPiece.vue";
 
 const props = defineProps<{
-  initialGameSnapshot: GameSnapshot
+  snapshot: GameSnapshot
 }>();
 
 const horizontal = defineModel<boolean>("horizontal", {
@@ -141,15 +130,11 @@ const rotate = defineModel<boolean>("rotate", {
 });
 
 const emit = defineEmits<{
-  "game:reset": [],
-  "game:update": [snapshot: GameSnapshot]
+  "update:snapshot": [GameSnapshot]
 }>();
 
-const game = reactive(
-  new Game(copyOfGameSnapshot(props.initialGameSnapshot))
-);
-
-watch(() => game.snapshot, (newValue) => emit("game:update", newValue));
+const game = reactive(new Game(props.snapshot));
+watch(() => props.snapshot, (newValue) => game.update(newValue));
 
 const promotingPosition = ref<Position | null>(null);
 const isCheckmateModalOpened = ref(false);
@@ -158,6 +143,8 @@ const isStalemateModalOpened = ref(false);
 const handleMove = (move: Move) => {
   try {
     game.play(move);
+
+    emit("update:snapshot", game.snapshot);
 
     if (game.canPromote(move.destination)) {
       promotingPosition.value = move.destination;
@@ -185,6 +172,9 @@ const handlePromotion = (piece: Piece) => {
 
   try {
     game.promoteTo(promotingPosition.value, piece);
+
+    emit("update:snapshot", game.snapshot);
+
     promotingPosition.value = null;
   } catch (e) {
     if (!(e instanceof InvalidPromotionError)) {

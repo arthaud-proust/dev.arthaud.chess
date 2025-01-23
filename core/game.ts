@@ -2,19 +2,16 @@ import {
   canPromote,
   copyOfGameSnapshot,
   type GameSnapshot,
+  initialGameSnapshot,
   isCurrentPlayerCheckmated,
   isCurrentPlayerStalemated,
   type Move,
   type Piece,
   play,
   type Position,
-  promoteTo,
+  promoteTo
 } from "./rules";
-import {
-  countPoints,
-  eatenBlackPieces,
-  eatenWhitePieces,
-} from "@/core/piecesCounter";
+import { countPoints, eatenBlackPieces, eatenWhitePieces } from "@/core/piecesCounter";
 
 export class Game {
   private history: Array<GameSnapshot>;
@@ -85,5 +82,14 @@ export class Game {
     if (lastSnapshot) {
       this._snapshot = lastSnapshot;
     }
+  }
+
+  reset() {
+    this.history.unshift(this._snapshot);
+    this._snapshot = initialGameSnapshot();
+  }
+
+  update(snapshot: GameSnapshot) {
+    this._snapshot = copyOfGameSnapshot(snapshot);
   }
 }
