@@ -6,6 +6,8 @@
       <Board
         class="max-md:w-full md:h-full aspect-square w-auto"
         :snapshot="game.snapshot"
+        :can-move-pieces="!player||player===snapshot.currentPlayer"
+        :player="player"
         :horizontal="horizontal"
         :rotate="rotate"
         @move="handleMove"
@@ -49,32 +51,35 @@
       class="flex max-md:text-sm flex-wrap gap-x-8 gap-y-4 items-center select-none"
     >
       <div class="flex items-center gap-1">
-        <template v-if="game.snapshot.currentPlayer === WHITE">
-          <BoardPiece :piece="WK" class="w-8" />
-          <span>White to play</span>
-        </template>
-        <template v-else>
-          <BoardPiece :piece="BK" class="w-8" />
-          <span>Black to play</span>
-        </template>
+        <BoardPiece :piece="game.snapshot.currentPlayer === WHITE ? WK: BK" class="w-8" />
+        <span>
+            {{ game.snapshot.currentPlayer === player
+          ? "Your turn"
+          : "Other player turn"
+          }}
+        </span>
       </div>
 
       <div class="flex flex-wrap gap-2 items-center">
-        <label
-          v-tooltip="'Display board horizontally'"
-          class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2"
+        <template
+          v-if="uiControls"
         >
-          <input type="checkbox" v-model="horizontal" />
-          <span>Horizontal</span>
-        </label>
-        <label
-          v-if="!horizontal"
-          v-tooltip="'Rotate board for the current player'"
-          class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2"
-        >
-          <input type="checkbox" v-model="rotate" />
-          <span>Rotate</span>
-        </label>
+          <label
+            v-tooltip="'Display board horizontally'"
+            class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2"
+          >
+            <input type="checkbox" v-model="horizontal" />
+            <span>Horizontal</span>
+          </label>
+          <label
+            v-if="!horizontal"
+            v-tooltip="'Rotate board for the current player'"
+            class="flex gap-2 bg-neutral-100 rounded-md px-4 py-2"
+          >
+            <input type="checkbox" v-model="rotate" />
+            <span>Rotate</span>
+          </label>
+        </template>
 
         <button
           @click="undo"
@@ -110,7 +115,18 @@
 <script setup lang="ts">
 import Board from "@/components/Board.vue";
 import { Game } from "@/core/game";
-import { BK, type GameSnapshot, InvalidMoveError, InvalidPromotionError, type Move, type Piece, type Position, WHITE, WK } from "@/core/rules";
+import {
+  BK,
+  type Color,
+  type GameSnapshot,
+  InvalidMoveError,
+  InvalidPromotionError,
+  type Move,
+  type Piece,
+  type Position,
+  WHITE,
+  WK
+} from "@/core/rules";
 import { reactive, ref, watch } from "vue";
 import BoardPromotionModal from "@/components/BoardPromotionModal.vue";
 import BoardCheckmateModal from "@/components/BoardCheckmateModal.vue";
@@ -118,7 +134,9 @@ import BoardStalemateModal from "@/components/BoardStalemateModal.vue";
 import BoardPiece from "@/components/BoardPiece.vue";
 
 const props = defineProps<{
-  snapshot: GameSnapshot
+  snapshot: GameSnapshot,
+  player?: Color,
+  uiControls?: boolean
 }>();
 
 const horizontal = defineModel<boolean>("horizontal", {

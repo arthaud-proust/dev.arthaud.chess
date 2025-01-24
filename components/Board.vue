@@ -70,6 +70,7 @@ import {
   areSamePositions,
   BLACK,
   canPlay,
+  type Color,
   COLS,
   type GameSnapshot,
   type Move,
@@ -88,6 +89,8 @@ import { flipMatrixHorizontally, flipMatrixVertically, rotateMatrix90CounterCloc
 const props = withDefaults(
   defineProps<{
     snapshot: GameSnapshot;
+    canMovePieces?: boolean;
+    player?: Color;
     horizontal?: boolean;
     rotate?: boolean;
   }>(),
@@ -96,7 +99,6 @@ const props = withDefaults(
     rotate: false
   }
 );
-
 const emit = defineEmits<{
   "move": [Move];
 }>();
@@ -124,7 +126,10 @@ const orientedPositions = computed(() => {
   } else {
     positions = flipMatrixVertically(positions);
 
-    if (props.rotate && props.snapshot.currentPlayer === BLACK) {
+    if (
+      (props.rotate && props.snapshot.currentPlayer === BLACK)
+      || (props.player && props.player === BLACK)
+    ) {
       positions = flipMatrixVertically(flipMatrixHorizontally(positions));
     }
   }
@@ -139,6 +144,8 @@ const activePosition = ref<Position | null>(null);
 const isMovingPiece = ref(false);
 
 const markAsActivePiece = (position: Position) => {
+  if (!props.canMovePieces) return;
+
   if (activePosition.value && pieceColor(pieceAt(props.snapshot.board, activePosition.value)) !== pieceColor(pieceAt(props.snapshot.board, position))) {
     emit("move", {
       origin: activePosition.value,
@@ -172,6 +179,7 @@ const hoveredPosition = computed(() => {
 });
 
 const handleCaseClick = (position: Position) => {
+  if (!props.canMovePieces) return;
   if (!activePosition.value) return;
 
   emit("move", {
@@ -182,6 +190,7 @@ const handleCaseClick = (position: Position) => {
 };
 
 const placePiece = () => {
+  if (!props.canMovePieces) return;
   isMovingPiece.value = false;
 
   const position = hoveredPosition.value;

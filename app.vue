@@ -1,6 +1,7 @@
 <template>
   <GamePlayer
     class="h-dvh"
+    :player="player"
     :snapshot="game.snapshot"
     @update:snapshot="saveSnapshot"
     v-model:horizontal="horizontal"
@@ -12,7 +13,7 @@ import { useIntervalFn, useStorage } from "@vueuse/core";
 import { localStorageKey } from "@/utils/localStorage";
 import GamePlayer from "@/components/GamePlayer.vue";
 import type { StoredGame } from "#shared/types/game";
-import { type GameSnapshot, initialGameSnapshot } from "@/core/rules";
+import { type Color, type GameSnapshot, initialGameSnapshot } from "@/core/rules";
 
 const GLOBAL_GAME_ID = 0;
 
@@ -38,6 +39,7 @@ const saveSnapshot = (snapshot: GameSnapshot) => {
   });
 };
 
+const player = useStorage<Color>(localStorageKey("game.player"), game.value.snapshot.currentPlayer);
 const horizontal = useStorage(localStorageKey("ui.horizontal"), false);
 const rotate = useStorage(localStorageKey("ui.rotate"), false);
 </script>
