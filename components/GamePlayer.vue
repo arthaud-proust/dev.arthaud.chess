@@ -77,7 +77,7 @@
         </label>
 
         <button
-          @click="game.undo()"
+          @click="undo"
           v-if="game.canUndo"
           v-tooltip="'Undo last move'"
           class="bg-neutral-100 rounded-md px-4 py-2"
@@ -86,7 +86,7 @@
         </button>
 
         <button
-          @click="game.reset()"
+          @click="reset"
           v-tooltip="'Reset board for a new game'"
           class="bg-red-100 text-red-800 rounded-md px-4 py-2"
         >
@@ -181,5 +181,17 @@ const handlePromotion = (piece: Piece) => {
       console.error(e);
     }
   }
+};
+
+const reset = () => {
+  game.reset();
+
+  emit("update:snapshot", game.snapshot);
+};
+
+const undo = () => {
+  game.undo();
+
+  emit("update:snapshot", game.snapshot);
 };
 </script>
